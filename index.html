@@ -293,7 +293,14 @@
 
       
           <p>还在部署博客平台，艹了，简直日了狗</p>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/posts/8.6/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -376,10 +383,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="if-标签"><a href="#if-标签" class="headerlink" title="if 标签"></a>if 标签</h1><p>可以判断是否符合条件，再进行赋值查询</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">&quot;xxx&quot;</span> <span class="attr">parameterType</span>=<span class="string">&quot;User&quot;</span> <span class="attr">resultMap</span>=<span class="string">&quot;baseMap&quot;</span>&gt;</span></span><br><span class="line">	select * </span><br><span class="line">    from tb_user</span><br><span class="line">    where 1=1</span><br><span class="line">    <span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">&quot;userName != null&quot;</span>&gt;</span></span><br><span class="line">        and user_name=#&#123;userName&#125;</span><br><span class="line">    <span class="tag">&lt;/<span class="name">if</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">&quot;realName != null&quot;</span>&gt;</span></span><br><span class="line">        and real_name=#&#123;realName&#125;</span><br><span class="line">    <span class="tag">&lt;/<span class="name">if</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">&quot;age &gt; 0&quot;</span>&gt;</span></span><br><span class="line">        and age=#&#123;age&#125;</span><br><span class="line">    <span class="tag">&lt;/<span class="name">if</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">&quot;id != null&quot;</span>&gt;</span></span><br><span class="line">        and id=#&#123;id&#125;</span><br><span class="line">    <span class="tag">&lt;/<span class="name">if</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<h1 id="where-标签"><a href="#where-标签" class="headerlink" title="where 标签"></a>where 标签</h1>
+          <h1 id="if-标签"><a href="#if-标签" class="headerlink" title="if 标签"></a>if 标签</h1>
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/posts/mybatis%E5%8A%A8%E6%80%81sql/#more" rel="contents">
