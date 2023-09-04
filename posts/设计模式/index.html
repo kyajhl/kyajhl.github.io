@@ -29,8 +29,12 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://kyajhl.github.io/posts/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/1.jpg">
 <meta property="og:image" content="https://kyajhl.github.io/posts/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/2.jpg">
+<meta property="og:image" content="https://kyajhl.github.io/posts/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/3.jpg">
+<meta property="og:image" content="https://kyajhl.github.io/posts/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/4.jpg">
+<meta property="og:image" content="https://kyajhl.github.io/posts/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/5.jpg">
+<meta property="og:image" content="https://kyajhl.github.io/posts/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/6.jpg">
 <meta property="article:published_time" content="2023-09-03T10:23:43.000Z">
-<meta property="article:modified_time" content="2023-09-03T12:09:28.624Z">
+<meta property="article:modified_time" content="2023-09-04T12:57:12.532Z">
 <meta property="article:author" content="kefan">
 <meta property="article:tag" content="设计模式">
 <meta name="twitter:card" content="summary">
@@ -244,10 +248,16 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2023-09-03 18:23:43 / 修改时间：20:09:28" itemprop="dateCreated datePublished" datetime="2023-09-03T18:23:43+08:00">2023-09-03</time>
+              <time title="创建时间：2023-09-03 18:23:43" itemprop="dateCreated datePublished" datetime="2023-09-03T18:23:43+08:00">2023-09-03</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-09-04 20:57:12" itemprop="dateModified" datetime="2023-09-04T20:57:12+08:00">2023-09-04</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
@@ -271,14 +281,14 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>3.4k</span>
+              <span>4.8k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="fa fa-clock-o"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>3 分钟</span>
+              <span>4 分钟</span>
             </span>
 
         </div>
@@ -376,16 +386,37 @@
 </tr>
 </tbody></table>
 <h2 id="2、单一职责原则"><a href="#2、单一职责原则" class="headerlink" title="2、单一职责原则"></a>2、单一职责原则</h2><p><img src="/posts/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/1.jpg" alt="1"></p>
-<p>如图所示的一个类，类中的方法说明如下：getConnection()方法用于连接数据库，findCustomers()用于查询所有的客户信息，createChart()用于创建图表，displayChart()用于显示图表。</p>
-<p>CustomerDataChart类承担了太多的职责，既包含与数据库相关的方法，又包含与图表生成和显示相关的方法。如果在其他类中也需要连接数据库或者使用findCustomers()方法查询客户信息，则难以实现代码的重用。无论是修改数据库连接方式还是修改图表显示方式都需要修改该类，它不止一个引起它变化的原因，违背了单一职责原则。因此需要对该类进行拆分，使其满足单一职责原则，类CustomerDataChart可拆分为如下三个类：</p>
+<p>如图所示的一个类，类中的方法说明如下：<code>getConnection()</code>方法用于连接数据库，<code>findCustomers()</code>用于查询所有的客户信息，<code>createChart()</code>用于创建图表，<code>displayChart()</code>用于显示图表。</p>
+<p><code>CustomerDataChart</code>类承担了太多的职责，既包含与数据库相关的方法，又包含与图表生成和显示相关的方法。如果在其他类中也需要连接数据库或者使用<code>findCustomers()</code>方法查询客户信息，则难以实现代码的重用。无论是修改数据库连接方式还是修改图表显示方式都需要修改该类，它不止一个引起它变化的原因，违背了单一职责原则。因此需要对该类进行拆分，使其满足单一职责原则，类<code>CustomerDataChart</code>可拆分为如下三个类：</p>
 <ol>
-<li>DBUtil：负责连接数据库，包含数据库连接方法getConnection()</li>
-<li>CustomerDAO：负责操作数据库中的Customer表，包含对Customer表的增删改查等方法，如findCustomers()</li>
-<li>CustomerDataChart：负责图表的生成和显示，包含方法createChart()和displayChart()</li>
+<li><code>DBUtil</code>：负责连接数据库，包含数据库连接方法<code>getConnection()</code></li>
+<li><code>CustomerDAO</code>：负责操作数据库中的Customer表，包含对<code>Customer</code>表的增删改查等方法，如<code>findCustomers()</code></li>
+<li><code>CustomerDataChart</code>：负责图表的生成和显示，包含方法<code>createChart()</code>和<code>displayChart()</code></li>
 </ol>
 <p>使用单一职责原则，重构后的结构如下图所示：</p>
 <p><img src="/posts/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/2.jpg" alt="2"></p>
-<h2 id="3、开闭原则"><a href="#3、开闭原则" class="headerlink" title="3、开闭原则"></a>3、开闭原则</h2>
+<h2 id="3、开闭原则"><a href="#3、开闭原则" class="headerlink" title="3、开闭原则"></a>3、开闭原则</h2><p><img src="/posts/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/3.jpg" alt="3"></p>
+<p>如图所示，在<code>ChartDisplay</code>类的<code>display()</code>方法中存在以下片段：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">......</span><br><span class="line"><span class="keyword">if</span> (type.equals(<span class="string">&quot;pie&quot;</span>)) &#123;</span><br><span class="line">    <span class="type">PieChart</span> <span class="variable">pieChart</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">PieChart</span>();</span><br><span class="line">    pieChart.display();</span><br><span class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span> (type.equals(<span class="string">&quot;bar&quot;</span>)) &#123;</span><br><span class="line">    <span class="type">BarChart</span> <span class="variable">barChart</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BarChart</span>();</span><br><span class="line">	barChart.display();</span><br><span class="line">&#125;</span><br><span class="line">......</span><br></pre></td></tr></table></figure>
+
+<p>在该代码中，如果需要增加一个新的图表类，如折线图<code>LineChart</code>，则需要修改<code>ChartDisplay</code>类的<code>display()</code>方法的源代码，增加新的判断逻辑，违反了开闭原则。</p>
+<p>现对该系统进行重构，使之符合开闭原则。</p>
+<p>在本实例中，由于在<code>ChartDisplay</code>类的<code>display()</code>方法中针对每一个图表类编程，因此增加新的图表类不得不修改源代码。可以通过抽象化的方式对系统进行重构，使之增加新的图表类时无须修改源代码，满足开闭原则。具体做法如下：</p>
+<ol>
+<li>增加一个抽象图表类<code>AbstractChart</code>，将各种具体图表类作为其子类</li>
+<li><code>ChartDisplay</code>类针对抽象图表类进行编程，由客户端来决定使用哪种具体图表</li>
+</ol>
+<p>重构后的结构如下图所示：</p>
+<p><img src="/posts/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/4.jpg" alt="4"></p>
+<p>我们引入了抽象图表类<code>AbstractChart</code>，且<code>ChartDisplay</code>针对抽象图表类进行编程，并通过<code>setChart()</code>方法由客户端来设置实例化的具体图表对象，在<code>ChartDisplay</code>的<code>display()</code>方法中调用<code>chart</code>对象的<code>display()</code>方法显示图表。如果需要增加一种新的图表，如折线图<code>LineChart</code>，只需要将<code>LineChart</code>也作为<code>AbstractChart</code>的子类，在客户端向<code>ChartDisplay</code>中注入一个<code>LineChart</code>对象即可，无须修改现有类库的源代码</p>
+<h2 id="4、里氏代换原则"><a href="#4、里氏代换原则" class="headerlink" title="4、里氏代换原则"></a>4、里氏代换原则</h2><p>定义：<strong>所有引用基类（父类）的地方必须能透明地使用其子类的对象</strong></p>
+<p>里氏代换原则告诉我们，<strong>在软件中将一个基类对象替换成它的子类对象，程序将不会产生任何错误和异常，反过来则不成立，如果一个软件实体使用的是一个子类对象的话，那么它不一定能够使用基类对象</strong>。里氏代换原则是实现开闭原则的重要方式之一，由于使用基类对象的地方都可以使用子类对象，因此<strong>在程序中尽量使用基类类型来对对象进行定义，而在运行时再确定其子类类型，用子类对象来替换父类对象</strong></p>
+<p><img src="/posts/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/5.jpg" alt="5"></p>
+<p>如上图所示，客户(Customer)可以分为VIP客户(<code>VIPCustomer</code>)和普通客户(<code>CommonCustomer</code>)两类，系统需要提供一个发送Email的功能</p>
+<p>在对系统进行进一步分析后发现，无论是普通客户还是VIP客户，发送邮件的过程都是相同的，也就是说两个<code>send()</code>方法中的代码重复，而且在本系统中还将增加新类型的客户。为了让系统具有更好的扩展性，同时减少代码重复，使用里氏代换原则对其进行重构</p>
+<p><img src="/posts/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/6.jpg" alt="6"></p>
+<p>重构之后，新增加一个<code>Customer</code>类作为<code>CommonCustomer</code>和<code>VIPCustomer</code>的抽象类，邮件发送类<code>EmailSender</code>针对抽象客户类<code>Customer</code>编程，根据里氏代换原则，能够接受基类对象的地方必然能够接受子类对象，因此将<code>EmailSender</code>中的<code>send()</code>方法的参数类型改为<code>Customer</code>，如果需要增加新类型的客户，只需将其作为<code>Customer</code>类的子类即可</p>
+<h2 id="5、依赖倒转原则"><a href="#5、依赖倒转原则" class="headerlink" title="5、依赖倒转原则"></a>5、依赖倒转原则</h2>
     </div>
 
     
@@ -510,7 +541,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%A8%A1%E5%BC%8F"><span class="nav-number">1.</span> <span class="nav-text">模式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1%E3%80%81%E4%BB%80%E4%B9%88%E6%98%AF%E6%A8%A1%E5%BC%8F%EF%BC%9F"><span class="nav-number">1.1.</span> <span class="nav-text">1、什么是模式？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2%E3%80%81-%E6%A8%A1%E5%BC%8F%E7%9A%84%E4%BD%9C%E7%94%A8"><span class="nav-number">1.2.</span> <span class="nav-text">2、 模式的作用</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F"><span class="nav-number">2.</span> <span class="nav-text">设计模式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1%E3%80%81%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E5%8C%85%E5%90%AB%E4%BB%80%E4%B9%88"><span class="nav-number">2.1.</span> <span class="nav-text">1、设计模式包含什么</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2%E3%80%81%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E5%88%86%E4%B8%BA%E5%87%A0%E7%A7%8D"><span class="nav-number">2.2.</span> <span class="nav-text">2、设计模式分为几种</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-number">2.2.1.</span> <span class="nav-text">&quot;简单工厂模式&quot;并不在23种设计模式之中</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3%E3%80%81%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E6%9C%89%E4%BB%80%E4%B9%88%E7%94%A8"><span class="nav-number">2.3.</span> <span class="nav-text">3、设计模式有什么用</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99"><span class="nav-number">3.</span> <span class="nav-text">面向对象设计原则</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1%E3%80%81%E6%A6%82%E8%BF%B0"><span class="nav-number">3.1.</span> <span class="nav-text">1、概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2%E3%80%81%E5%8D%95%E4%B8%80%E8%81%8C%E8%B4%A3%E5%8E%9F%E5%88%99"><span class="nav-number">3.2.</span> <span class="nav-text">2、单一职责原则</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3%E3%80%81%E5%BC%80%E9%97%AD%E5%8E%9F%E5%88%99"><span class="nav-number">3.3.</span> <span class="nav-text">3、开闭原则</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%A8%A1%E5%BC%8F"><span class="nav-number">1.</span> <span class="nav-text">模式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1%E3%80%81%E4%BB%80%E4%B9%88%E6%98%AF%E6%A8%A1%E5%BC%8F%EF%BC%9F"><span class="nav-number">1.1.</span> <span class="nav-text">1、什么是模式？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2%E3%80%81-%E6%A8%A1%E5%BC%8F%E7%9A%84%E4%BD%9C%E7%94%A8"><span class="nav-number">1.2.</span> <span class="nav-text">2、 模式的作用</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F"><span class="nav-number">2.</span> <span class="nav-text">设计模式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1%E3%80%81%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E5%8C%85%E5%90%AB%E4%BB%80%E4%B9%88"><span class="nav-number">2.1.</span> <span class="nav-text">1、设计模式包含什么</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2%E3%80%81%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E5%88%86%E4%B8%BA%E5%87%A0%E7%A7%8D"><span class="nav-number">2.2.</span> <span class="nav-text">2、设计模式分为几种</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-number">2.2.1.</span> <span class="nav-text">&quot;简单工厂模式&quot;并不在23种设计模式之中</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3%E3%80%81%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E6%9C%89%E4%BB%80%E4%B9%88%E7%94%A8"><span class="nav-number">2.3.</span> <span class="nav-text">3、设计模式有什么用</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99"><span class="nav-number">3.</span> <span class="nav-text">面向对象设计原则</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1%E3%80%81%E6%A6%82%E8%BF%B0"><span class="nav-number">3.1.</span> <span class="nav-text">1、概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2%E3%80%81%E5%8D%95%E4%B8%80%E8%81%8C%E8%B4%A3%E5%8E%9F%E5%88%99"><span class="nav-number">3.2.</span> <span class="nav-text">2、单一职责原则</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3%E3%80%81%E5%BC%80%E9%97%AD%E5%8E%9F%E5%88%99"><span class="nav-number">3.3.</span> <span class="nav-text">3、开闭原则</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4%E3%80%81%E9%87%8C%E6%B0%8F%E4%BB%A3%E6%8D%A2%E5%8E%9F%E5%88%99"><span class="nav-number">3.4.</span> <span class="nav-text">4、里氏代换原则</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5%E3%80%81%E4%BE%9D%E8%B5%96%E5%80%92%E8%BD%AC%E5%8E%9F%E5%88%99"><span class="nav-number">3.5.</span> <span class="nav-text">5、依赖倒转原则</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -655,13 +686,13 @@
       <i class="fa fa-area-chart"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">11k</span>
+    <span title="站点总字数">12k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">10 分钟</span>
+    <span title="站点阅读时长">11 分钟</span>
 </div><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="/js/canvas-nest.js"></script>
 
 
