@@ -6,7 +6,7 @@
   <link href="https://kyajhl.github.io/atom.xml" rel="self"/>
   
   <link href="https://kyajhl.github.io/"/>
-  <updated>2023-09-03T12:09:28.624Z</updated>
+  <updated>2023-09-04T07:03:32.485Z</updated>
   <id>https://kyajhl.github.io/</id>
   
   <author>
@@ -15,6 +15,27 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>linux</title>
+    <link href="https://kyajhl.github.io/posts/linux/"/>
+    <id>https://kyajhl.github.io/posts/linux/</id>
+    <published>2023-09-04T06:41:49.000Z</published>
+    <updated>2023-09-04T07:03:32.485Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="vim编辑器"><a href="#vim编辑器" class="headerlink" title="vim编辑器"></a>vim编辑器</h1><h2 id="1、查找功能"><a href="#1、查找功能" class="headerlink" title="1、查找功能"></a>1、查找功能</h2><h3 id="（1）、匹配"><a href="#（1）、匹配" class="headerlink" title="（1）、匹配"></a>（1）、匹配</h3><ul><li><p>片段匹配</p><ol><li>从上往下找，比如“hello”：&#x2F;hello</li><li>从下往上找，比如”hello“：?hello</li></ol></li><li><p>精确匹配</p><p>如果你输入“&#x2F;the”，你也可能找到“three“。</p><ol><li>只匹配单词开头：&#x2F;\&lt;the</li><li>只匹配单词结尾：&#x2F;the\&gt;</li><li>完整匹配单词：&#x2F;\&lt;the\&gt;</li></ol></li></ul><h3 id="（2）、正则表达式"><a href="#（2）、正则表达式" class="headerlink" title="（2）、正则表达式"></a>（2）、正则表达式</h3><ol><li>”.“：通配一个字符，如匹配server，可以用&#x2F;se…r，一个”.“只匹配一个字符</li><li>”*“：统配多个字符，如匹配server，可以用s*r，一个”*“可以匹配多个字符</li></ol><h3 id="（3）、快速查找"><a href="#（3）、快速查找" class="headerlink" title="（3）、快速查找"></a>（3）、快速查找</h3>]]></content>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;vim编辑器&quot;&gt;&lt;a href=&quot;#vim编辑器&quot; class=&quot;headerlink&quot; title=&quot;vim编辑器&quot;&gt;&lt;/a&gt;vim编辑器&lt;/h1&gt;&lt;h2 id=&quot;1、查找功能&quot;&gt;&lt;a href=&quot;#1、查找功能&quot; class=&quot;headerlink&quot; title=&quot;1、查找功能&quot;&gt;&lt;/a&gt;1、查找功能&lt;/h2&gt;</summary>
+    
+    
+    
+    <category term="学习笔记" scheme="https://kyajhl.github.io/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"/>
+    
+    
+    <category term="linux" scheme="https://kyajhl.github.io/tags/linux/"/>
+    
+  </entry>
   
   <entry>
     <title>设计模式</title>
@@ -42,8 +63,12 @@
     <link href="https://kyajhl.github.io/posts/redis/"/>
     <id>https://kyajhl.github.io/posts/redis/</id>
     <published>2023-09-03T02:39:00.000Z</published>
-    <updated>2023-09-03T03:02:11.187Z</updated>
+    <updated>2023-09-04T07:18:23.745Z</updated>
     
+    <content type="html"><![CDATA[<h1 id="Redis-10大数据类型"><a href="#Redis-10大数据类型" class="headerlink" title="Redis 10大数据类型"></a>Redis 10大数据类型</h1><p>10大数据类型包括：<strong>String</strong>(字符串)，<strong>Bitmap</strong>(位图)，<strong>Bitfield</strong>(位域)，<strong>Hash</strong>(哈希表)，<strong>List</strong>(集合)，<strong>Set</strong>(列表)，<strong>Sorted set</strong>(有序集合 ZSet)，<strong>Geospatial</strong>(地理空间)，<strong>Hyperlog</strong>(基数统计)，<strong>Stream</strong>(流)</p><h1 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h1><ol><li>keys *：查看当前库所有的key</li><li>exists [key…]：判断某个key是否存在，返回的数字为存在的key数量</li><li>type key：查看key是什么类型</li><li>del [key…]：删除指定的key数据，返回的数字为删除的key数量（原子性，若key很大，则在高并发情况下会产生阻塞队列）</li><li>unlink [key…]：非阻塞删除，会在异步中操作（非阻塞，异步操作，不会产生阻塞队列）</li><li>ttl key：查看还有多少秒过期，-1表示永不过期，-2表示已过期</li><li>expire key：为给定的key设置过期时间</li><li>move key dbindex[0-15]：将当前数据库的key移动到给定的数据库db当中，dbindex直接输入数字即可</li><li>select dbindex：切换数据库[0-15]，默认为0</li><li>dbsize：查看当前数据库key的数量</li><li>flushdb：清空当前库（很危险，尽量不要使用）</li><li>flushall：通杀全部库（更危险，最好不要使用）</li></ol><p>备注：</p><blockquote><p>命令不区分大小写，而key区分大小写</p><p>永远的帮助命令，help @类型，如help @String，help @List，help @Hash</p></blockquote><h1 id="String类型"><a href="#String类型" class="headerlink" title="String类型"></a>String类型</h1>]]></content>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;Redis-10大数据类型&quot;&gt;&lt;a href=&quot;#Redis-10大数据类型&quot; class=&quot;headerlink&quot; title=&quot;Redis 10大数据类型&quot;&gt;&lt;/a&gt;Redis 10大数据类型&lt;/h1&gt;&lt;p&gt;10大数据类型包括：&lt;strong&gt;String&lt;/strong&gt;(字符串)，&lt;strong&gt;Bitmap&lt;/strong&gt;(位图)，&lt;strong&gt;Bitfield&lt;/strong&gt;(位域)，&lt;strong&gt;Hash&lt;/strong&gt;(哈希表)，&lt;strong&gt;List&lt;/strong&gt;(集合)，&lt;strong&gt;Set&lt;/strong&gt;(列表)，&lt;strong&gt;Sorted set&lt;/strong&gt;(有序集合 ZSet)，&lt;strong&gt;Geospatial&lt;/strong&gt;(地理空间)，&lt;strong&gt;Hyperlog&lt;/strong&gt;(基数统计)，&lt;strong&gt;Stream&lt;/strong&gt;(流)&lt;/p&gt;</summary>
     
     
     
