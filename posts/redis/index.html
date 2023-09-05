@@ -28,7 +28,7 @@
 <meta property="og:description" content="Redis 10大数据类型10大数据类型包括：String(字符串)，Bitmap(位图)，Bitfield(位域)，Hash(哈希表)，List(集合)，Set(列表)，Sorted set(有序集合 ZSet)，Geospatial(地理空间)，Hyperlog(基数统计)，Stream(流)">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2023-09-03T02:39:00.000Z">
-<meta property="article:modified_time" content="2023-09-04T07:18:23.745Z">
+<meta property="article:modified_time" content="2023-09-05T06:12:41.894Z">
 <meta property="article:author" content="kefan">
 <meta property="article:tag" content="redis">
 <meta name="twitter:card" content="summary">
@@ -249,7 +249,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-09-04 15:18:23" itemprop="dateModified" datetime="2023-09-04T15:18:23+08:00">2023-09-04</time>
+                <time title="修改时间：2023-09-05 14:12:41" itemprop="dateModified" datetime="2023-09-05T14:12:41+08:00">2023-09-05</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -274,14 +274,14 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>626</span>
+              <span>1.7k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="fa fa-clock-o"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
+              <span>2 分钟</span>
             </span>
 
         </div>
@@ -295,25 +295,58 @@
       
         <h1 id="Redis-10大数据类型"><a href="#Redis-10大数据类型" class="headerlink" title="Redis 10大数据类型"></a>Redis 10大数据类型</h1><p>10大数据类型包括：<strong>String</strong>(字符串)，<strong>Bitmap</strong>(位图)，<strong>Bitfield</strong>(位域)，<strong>Hash</strong>(哈希表)，<strong>List</strong>(集合)，<strong>Set</strong>(列表)，<strong>Sorted set</strong>(有序集合 ZSet)，<strong>Geospatial</strong>(地理空间)，<strong>Hyperlog</strong>(基数统计)，<strong>Stream</strong>(流)</p>
 <h1 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h1><ol>
-<li>keys *：查看当前库所有的key</li>
-<li>exists [key…]：判断某个key是否存在，返回的数字为存在的key数量</li>
-<li>type key：查看key是什么类型</li>
-<li>del [key…]：删除指定的key数据，返回的数字为删除的key数量（原子性，若key很大，则在高并发情况下会产生阻塞队列）</li>
-<li>unlink [key…]：非阻塞删除，会在异步中操作（非阻塞，异步操作，不会产生阻塞队列）</li>
-<li>ttl key：查看还有多少秒过期，-1表示永不过期，-2表示已过期</li>
-<li>expire key：为给定的key设置过期时间</li>
-<li>move key dbindex[0-15]：将当前数据库的key移动到给定的数据库db当中，dbindex直接输入数字即可</li>
-<li>select dbindex：切换数据库[0-15]，默认为0</li>
-<li>dbsize：查看当前数据库key的数量</li>
-<li>flushdb：清空当前库（很危险，尽量不要使用）</li>
-<li>flushall：通杀全部库（更危险，最好不要使用）</li>
+<li><code>keys *</code>：查看当前库所有的key</li>
+<li><code>exists [key...]</code>：判断某个key是否存在，返回的数字为存在的key数量</li>
+<li><code>type key</code>：查看key是什么类型</li>
+<li><code>del [key...]</code>：删除指定的key数据，返回的数字为删除的key数量（原子性，若key很大，则在高并发情况下会产生阻塞队列）</li>
+<li><code>unlink [key...]</code>：非阻塞删除，会在异步中操作（非阻塞，异步操作，不会产生阻塞队列）</li>
+<li><code>ttl key</code>：查看还有多少秒过期，-1表示永不过期，-2表示已过期</li>
+<li><code>expire key</code>：为给定的key设置过期时间</li>
+<li><code>move key dbindex[0-15]</code>：将当前数据库的key移动到给定的数据库db当中，dbindex直接输入数字即可</li>
+<li><code>select dbindex</code>：切换数据库[0-15]，默认为0</li>
+<li><code>dbsize</code>：查看当前数据库key的数量</li>
+<li><code>flushdb</code>：清空当前库（很危险，尽量不要使用）</li>
+<li><code>flushall</code>：通杀全部库（更危险，最好不要使用）</li>
 </ol>
 <p>备注：</p>
 <blockquote>
 <p>命令不区分大小写，而key区分大小写</p>
 <p>永远的帮助命令，help @类型，如help @String，help @List，help @Hash</p>
 </blockquote>
-<h1 id="String类型"><a href="#String类型" class="headerlink" title="String类型"></a>String类型</h1>
+<h1 id="String类型"><a href="#String类型" class="headerlink" title="String类型"></a>String类型</h1><h2 id="1、set命令"><a href="#1、set命令" class="headerlink" title="1、set命令"></a>1、set命令</h2><ol>
+<li><code>set key value [nx|xx]</code>：*<code>nx</code><em>表示 <em>key</em> 不存在时 <em>set</em> ，</em><code>xx</code>*表示 <em>key</em> 存在时 <em>set</em>，若不符合情况，均返回 <em>null</em></li>
+<li><code>set key value [get]</code>：*<code>get</code>*表示会返回<strong>老值</strong>，同时设置<strong>新值</strong>，若 <em>key</em> 不存在则返回 <em>null</em></li>
+<li><code>set key value [ex seconds|px milliseconds] </code>：*<code>ex seconds</code>* 以秒为单位设置过期时间，*<code>px milliseconds</code>* 以毫秒为单位设置过期时间</li>
+<li><code>set key value [exat unix-time-seconds|pxat unix-time-milliseconds]</code>：*<code>exat unix-time-seconds</code>* 设置以秒为单位的<em>unix</em> 时间戳所对应的时间为过期时间，*<code>pxat unix-time-milliseconds</code>* 设置以毫秒为单位的 <em>unix</em> 时间戳所对应的时间为过期时间</li>
+<li><code>set key value [keepttl]</code>：*<code>keepttl</code>* 保留设置前指定键的生存时间，这样在修改了 <em>key</em> 值后也不会丢失原来的过期时间</li>
+</ol>
+<h2 id="2、mset、mget和msetnx命令"><a href="#2、mset、mget和msetnx命令" class="headerlink" title="2、mset、mget和msetnx命令"></a>2、mset、mget和msetnx命令</h2><ol>
+<li><code>mset key value [key value ...]</code>：同时设置多个键值</li>
+<li><code>mget key [key ...]</code>：同时获取多个键值</li>
+<li><code>msetnx key value [key value ...]</code>：只有不存在键，才能设置值，并且是同时设置，即使只有一个不存在，也不能设置值</li>
+</ol>
+<h2 id="3、getrange和setrange命令"><a href="#3、getrange和setrange命令" class="headerlink" title="3、getrange和setrange命令"></a>3、getrange和setrange命令</h2><ol>
+<li><code>getrange key start end</code>：相当于 <em>Java</em> 中的 <code>subString</code> ，可以截取范围内的字符串</li>
+<li><code>setrange key offset value</code>：从 <em>offset</em> 开始，用 <em>value</em> 覆盖原来的值，<em>value</em> 有多少位，就覆盖多少位</li>
+</ol>
+<h2 id="4、incr、incrby、decr和decrby命令"><a href="#4、incr、incrby、decr和decrby命令" class="headerlink" title="4、incr、incrby、decr和decrby命令"></a>4、incr、incrby、decr和decrby命令</h2><ol>
+<li><code>incr key</code>：递增数字</li>
+<li><code>incrby key increment</code>：增加指定的整数</li>
+<li><code>decr key</code>：递减数字</li>
+<li><code>decrby key decrement</code>：减少指定的整数</li>
+</ol>
+<h2 id="5、strlen和append命令"><a href="#5、strlen和append命令" class="headerlink" title="5、strlen和append命令"></a>5、strlen和append命令</h2><ol>
+<li><code>strlen key</code>：获取字符串长度</li>
+<li><code>append key value</code>：往键值追加指定内容 <em>value</em></li>
+</ol>
+<h2 id="6、setex和setnx命令-分布式锁"><a href="#6、setex和setnx命令-分布式锁" class="headerlink" title="6、setex和setnx命令(分布式锁)"></a>6、setex和setnx命令(分布式锁)</h2><ol>
+<li><code>setex key seconds value</code>：给 <em>key</em> 设置过期时间和值</li>
+<li><code>setnx key value</code>：只有当 <em>key</em> 不存在时，才会设置值</li>
+</ol>
+<h2 id="7、getset命令"><a href="#7、getset命令" class="headerlink" title="7、getset命令"></a>7、getset命令</h2><ol>
+<li><code>getset key value</code>：先 <em>get</em> ，再 <em>set</em> ，和 <code>set key value get</code> 一致</li>
+</ol>
+<h1 id="List类型"><a href="#List类型" class="headerlink" title="List类型"></a>List类型</h1>
     </div>
 
     
@@ -438,7 +471,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Redis-10%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="nav-number">1.</span> <span class="nav-text">Redis 10大数据类型</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="nav-number">2.</span> <span class="nav-text">常用命令</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#String%E7%B1%BB%E5%9E%8B"><span class="nav-number">3.</span> <span class="nav-text">String类型</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Redis-10%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="nav-number">1.</span> <span class="nav-text">Redis 10大数据类型</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="nav-number">2.</span> <span class="nav-text">常用命令</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#String%E7%B1%BB%E5%9E%8B"><span class="nav-number">3.</span> <span class="nav-text">String类型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1%E3%80%81set%E5%91%BD%E4%BB%A4"><span class="nav-number">3.1.</span> <span class="nav-text">1、set命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2%E3%80%81mset%E3%80%81mget%E5%92%8Cmsetnx%E5%91%BD%E4%BB%A4"><span class="nav-number">3.2.</span> <span class="nav-text">2、mset、mget和msetnx命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3%E3%80%81getrange%E5%92%8Csetrange%E5%91%BD%E4%BB%A4"><span class="nav-number">3.3.</span> <span class="nav-text">3、getrange和setrange命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4%E3%80%81incr%E3%80%81incrby%E3%80%81decr%E5%92%8Cdecrby%E5%91%BD%E4%BB%A4"><span class="nav-number">3.4.</span> <span class="nav-text">4、incr、incrby、decr和decrby命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5%E3%80%81strlen%E5%92%8Cappend%E5%91%BD%E4%BB%A4"><span class="nav-number">3.5.</span> <span class="nav-text">5、strlen和append命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6%E3%80%81setex%E5%92%8Csetnx%E5%91%BD%E4%BB%A4-%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81"><span class="nav-number">3.6.</span> <span class="nav-text">6、setex和setnx命令(分布式锁)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7%E3%80%81getset%E5%91%BD%E4%BB%A4"><span class="nav-number">3.7.</span> <span class="nav-text">7、getset命令</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#List%E7%B1%BB%E5%9E%8B"><span class="nav-number">4.</span> <span class="nav-text">List类型</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -583,13 +616,13 @@
       <i class="fa fa-area-chart"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">12k</span>
+    <span title="站点总字数">13k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">11 分钟</span>
+    <span title="站点阅读时长">12 分钟</span>
 </div><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="/js/canvas-nest.js"></script>
 
 
