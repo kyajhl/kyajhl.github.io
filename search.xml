@@ -340,7 +340,7 @@
 <li>设计模式的“上乘”境界：“手中无模式，心中有模式”。模式使用的最高境界是你已经不知道具体某个设计模式的定义和结构了，但你会灵活自如地选择一种设计方案【其实就是某个设计模式】来解决某个问题，设计模式已经成为你开发技能的一部分，能够手到擒来，“内功”与“招式”已浑然一体，要达到这个境界并不是看完某本书或者开发一两个项目就能够实现的，它需要不断沉淀与积累，所以，对模式的学习不要急于求成</li>
 </ul>
 </blockquote>
-<h1 id="面向对象设计原则"><a href="#面向对象设计原则" class="headerlink" title="面向对象设计原则"></a>面向对象设计原则</h1><h2 id="1、概述"><a href="#1、概述" class="headerlink" title="1、概述"></a>1、概述</h2><p>对于面向对象软件系统的设计而言，在支持可维护性的同时，提高系统的可复用性是一个至关重要的问题，如何同时提高一个软件系统的可维护性和可复用性是面向对象设计需要解决的核心问题之一。在面向对象设计中，可维护性的复用是以设计原则为基础的。每一个原则都蕴含一些面向对象设计的思想，可以从不同的角度提升一个软件结构的设计水平。</p>
+<h1 id="面向对象设计原则"><a href="#面向对象设计原则" class="headerlink" title="面向对象设计原则"></a>面向对象设计原则</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>对于面向对象软件系统的设计而言，在支持可维护性的同时，提高系统的可复用性是一个至关重要的问题，如何同时提高一个软件系统的可维护性和可复用性是面向对象设计需要解决的核心问题之一。在面向对象设计中，可维护性的复用是以设计原则为基础的。每一个原则都蕴含一些面向对象设计的思想，可以从不同的角度提升一个软件结构的设计水平。</p>
 <p>面向对象设计原则为支持可维护性复用而诞生，这些原则蕴含在很多设计模式中，它们是从许多设计方案中总结出的指导性原则。面向对象设计原则也是我们用于评价一个设计模式的使用效果的重要指标之一，在设计模式的学习中，大家经常会看到诸如“XXX模式符合XXX原则”、“XXX模式违反了XXX原则”这样的语句</p>
 <p><strong>常见的7种面向对象设计原则</strong></p>
 <table>
@@ -387,7 +387,7 @@
 <td>★★★☆☆</td>
 </tr>
 </tbody></table>
-<h2 id="2、单一职责原则"><a href="#2、单一职责原则" class="headerlink" title="2、单一职责原则"></a>2、单一职责原则</h2><p><img src="/posts/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/1.jpg" alt="1"></p>
+<h2 id="1、单一职责原则"><a href="#1、单一职责原则" class="headerlink" title="1、单一职责原则"></a>1、单一职责原则</h2><p><img src="/posts/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/1.jpg" alt="1"></p>
 <p>如图所示的一个类，类中的方法说明如下：<code>getConnection()</code>方法用于连接数据库，<code>findCustomers()</code>用于查询所有的客户信息，<code>createChart()</code>用于创建图表，<code>displayChart()</code>用于显示图表。</p>
 <p><code>CustomerDataChart</code>类承担了太多的职责，既包含与数据库相关的方法，又包含与图表生成和显示相关的方法。如果在其他类中也需要连接数据库或者使用<code>findCustomers()</code>方法查询客户信息，则难以实现代码的重用。无论是修改数据库连接方式还是修改图表显示方式都需要修改该类，它不止一个引起它变化的原因，违背了单一职责原则。因此需要对该类进行拆分，使其满足单一职责原则，类<code>CustomerDataChart</code>可拆分为如下三个类：</p>
 <ol>
@@ -397,7 +397,7 @@
 </ol>
 <p>使用单一职责原则，重构后的结构如下图所示：</p>
 <p><img src="/posts/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/2.jpg" alt="2"></p>
-<h2 id="3、开闭原则"><a href="#3、开闭原则" class="headerlink" title="3、开闭原则"></a>3、开闭原则</h2><p><img src="/posts/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/3.jpg" alt="3"></p>
+<h2 id="2、开闭原则"><a href="#2、开闭原则" class="headerlink" title="2、开闭原则"></a>2、开闭原则</h2><p><img src="/posts/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/3.jpg" alt="3"></p>
 <p>如图所示，在<code>ChartDisplay</code>类的<code>display()</code>方法中存在以下片段：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line">......</span><br><span class="line"><span class="keyword">if</span> (type.equals(<span class="string">&quot;pie&quot;</span>)) &#123;</span><br><span class="line">    <span class="type">PieChart</span> <span class="variable">pieChart</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">PieChart</span>();</span><br><span class="line">    pieChart.display();</span><br><span class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span> (type.equals(<span class="string">&quot;bar&quot;</span>)) &#123;</span><br><span class="line">    <span class="type">BarChart</span> <span class="variable">barChart</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BarChart</span>();</span><br><span class="line">	barChart.display();</span><br><span class="line">&#125;</span><br><span class="line">......</span><br></pre></td></tr></table></figure>
 
@@ -411,14 +411,31 @@
 <p>重构后的结构如下图所示：</p>
 <p><img src="/posts/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/4.jpg" alt="4"></p>
 <p>我们引入了抽象图表类<code>AbstractChart</code>，且<code>ChartDisplay</code>针对抽象图表类进行编程，并通过<code>setChart()</code>方法由客户端来设置实例化的具体图表对象，在<code>ChartDisplay</code>的<code>display()</code>方法中调用<code>chart</code>对象的<code>display()</code>方法显示图表。如果需要增加一种新的图表，如折线图<code>LineChart</code>，只需要将<code>LineChart</code>也作为<code>AbstractChart</code>的子类，在客户端向<code>ChartDisplay</code>中注入一个<code>LineChart</code>对象即可，无须修改现有类库的源代码</p>
-<h2 id="4、里氏代换原则"><a href="#4、里氏代换原则" class="headerlink" title="4、里氏代换原则"></a>4、里氏代换原则</h2><p>定义：<strong>所有引用基类（父类）的地方必须能透明地使用其子类的对象</strong></p>
+<h2 id="3、里氏代换原则"><a href="#3、里氏代换原则" class="headerlink" title="3、里氏代换原则"></a>3、里氏代换原则</h2><p>定义：<strong>所有引用基类（父类）的地方必须能透明地使用其子类的对象</strong></p>
 <p>里氏代换原则告诉我们，<strong>在软件中将一个基类对象替换成它的子类对象，程序将不会产生任何错误和异常，反过来则不成立，如果一个软件实体使用的是一个子类对象的话，那么它不一定能够使用基类对象</strong>。里氏代换原则是实现开闭原则的重要方式之一，由于使用基类对象的地方都可以使用子类对象，因此<strong>在程序中尽量使用基类类型来对对象进行定义，而在运行时再确定其子类类型，用子类对象来替换父类对象</strong></p>
 <p><img src="/posts/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/5.jpg" alt="5"></p>
 <p>如上图所示，客户(Customer)可以分为VIP客户(<code>VIPCustomer</code>)和普通客户(<code>CommonCustomer</code>)两类，系统需要提供一个发送Email的功能</p>
 <p>在对系统进行进一步分析后发现，无论是普通客户还是VIP客户，发送邮件的过程都是相同的，也就是说两个<code>send()</code>方法中的代码重复，而且在本系统中还将增加新类型的客户。为了让系统具有更好的扩展性，同时减少代码重复，使用里氏代换原则对其进行重构</p>
 <p><img src="/posts/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/6.jpg" alt="6"></p>
 <p>重构之后，新增加一个<code>Customer</code>类作为<code>CommonCustomer</code>和<code>VIPCustomer</code>的抽象类，邮件发送类<code>EmailSender</code>针对抽象客户类<code>Customer</code>编程，根据里氏代换原则，能够接受基类对象的地方必然能够接受子类对象，因此将<code>EmailSender</code>中的<code>send()</code>方法的参数类型改为<code>Customer</code>，如果需要增加新类型的客户，只需将其作为<code>Customer</code>类的子类即可</p>
-<h2 id="5、依赖倒转原则"><a href="#5、依赖倒转原则" class="headerlink" title="5、依赖倒转原则"></a>5、依赖倒转原则</h2>]]></content>
+<h2 id="4、依赖倒转原则"><a href="#4、依赖倒转原则" class="headerlink" title="4、依赖倒转原则"></a>4、依赖倒转原则</h2><p>定义：<em><strong>抽象不应该依赖于细节，细节应当依赖于抽象。换言之，要针对接口编程，而不是针对实现编程</strong></em></p>
+<p><img src="/posts/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/7.jpg" alt="7"></p>
+<p>如上图所示，每次转换数据时数据来源不一定相同，因此需要更换数据转换类，如有时候需要将<code>TXTDataConvertor</code>改为<code>ExcelDataConvertor</code>，此时，需要修改<code>CustomerDAO</code>的源代码，而且在引入并使用新的数据转换类时也不得不修改<code>CustomerDAO</code>的源代码，系统扩展性较差，违反了开闭原则，现需要对该方案进行重构</p>
+<p>重构后如下图：</p>
+<p><img src="/posts/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/8.jpg" alt="8"></p>
+<p>由于<code>CustomerDAO</code>针对具体数据转换类编程，因此在增加新的数据转换类或者更换数据转换类时都不得不修改<code>CustomerDAO</code>的源代码。我们可以通过引入抽象数据转换类解决该问题，在引入抽象数据转换类<code>DataConvertor</code>之后，<code>CustomerDAO</code>针对抽象类<code>DataConvertor</code>编程，而将具体数据转换类名存储在配置文件中，符合依赖倒转原则。根据里氏代换原则，程序运行时，具体数据转换类对象将替换<code>ataConvertor</code>类型的对象，程序不会出现任何问题。更换具体数据转换类时无须修改源代码，只需要修改配置文件；如果需要增加新的具体数据转换类，只要将新增数据转换类作为<code>DataConvertor</code>的子类并修改配置文件即可，原有代码无须做任何修改，满足开闭原则</p>
+<p><em><strong>重点</strong></em></p>
+<blockquote>
+<p>在上述重构过程中，我们使用了开闭原则、里氏代换原则和依赖倒转原则，在大多数情况下，这三个设计原则会同时出现，<strong>开闭原则是目标，里氏代换原则是基础，依赖倒转原则是手段</strong>，它们相辅相成，相互补充，目标一致，只是分析问题时所站角度不同而已</p>
+</blockquote>
+<h2 id="5、接口隔离原则"><a href="#5、接口隔离原则" class="headerlink" title="5、接口隔离原则"></a>5、接口隔离原则</h2><p>定义：<em><strong>使用多个专门的接口，而不使用单一的总接口，即客户端不应该依赖那些它不需要的接口</strong></em></p>
+<p><img src="/posts/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/9.jpg" alt="9"></p>
+<p>如上图所示，方法<code>dataRead()</code>用于从文件中读取数据，方法<code>transformToXML()</code>用于将数据转换成XML格式，方法<code>createChart()</code>用于创建图表，方法<code>displayChart()</code>用于显示图表，方法<code>createReport()</code>用于创建文字报表，方法<code>displayReport()</code>用于显示文字报表。</p>
+<p>在实际使用过程中发现该接口很不灵活，例如如果一个具体的数据显示类无须进行数据转换（源文件本身就是XML格式），但由于实现了该接口，将不得不实现其中声明的<code>transformToXML()</code>方法（至少需要提供一个空实现）；如果需要创建和显示图表，除了需实现与图表相关的方法外，还需要实现创建和显示文字报表的方法，否则程序编译时将报错。现使用接口隔离原则对其进行重构</p>
+<p>重构后如下图：</p>
+<p><img src="/posts/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/10.jpg" alt="10"></p>
+<p><em><strong>在使用接口隔离原则时，我们需要注意控制接口的粒度，接口不能太小，如果太小会导致系统中接口泛滥，不利于维护；接口也不能太大，太大的接口将违背接口隔离原则，灵活性较差，使用起来很不方便</strong></em></p>
+<h2 id="6、合成复用原则"><a href="#6、合成复用原则" class="headerlink" title="6、合成复用原则"></a>6、合成复用原则</h2>]]></content>
       <categories>
         <category>学习笔记</category>
       </categories>
