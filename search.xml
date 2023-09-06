@@ -279,7 +279,56 @@
 <h2 id="7、getset命令"><a href="#7、getset命令" class="headerlink" title="7、getset命令"></a>7、getset命令</h2><ol>
 <li><code>getset key value</code>：先 <em>get</em> ，再 <em>set</em> ，和 <code>set key value get</code> 一致</li>
 </ol>
-<h1 id="List类型"><a href="#List类型" class="headerlink" title="List类型"></a>List类型</h1>]]></content>
+<h1 id="List类型"><a href="#List类型" class="headerlink" title="List类型"></a>List类型</h1><h2 id="1、lpush、rpush和lrange命令"><a href="#1、lpush、rpush和lrange命令" class="headerlink" title="1、lpush、rpush和lrange命令"></a>1、lpush、rpush和lrange命令</h2><ol>
+<li><code>lpush key element [element ...]</code>：给 <em>key</em> 设置一系列值，并且是从左插入，和链表类似</li>
+<li><code>rpush key element [element ...]</code>：给 <em>key</em> 设置一系列值，并且是从右插入，和链表类似</li>
+<li><code>lrange key start stop</code>：<em>list</em> 类型独有的遍历方式，<em>start</em> 和 <em>stop</em> 取下标，<em>stop</em> 为 -1 时表示遍历<strong>全部</strong></li>
+</ol>
+<h2 id="2、lpop和rpop命令"><a href="#2、lpop和rpop命令" class="headerlink" title="2、lpop和rpop命令"></a>2、lpop和rpop命令</h2><ol>
+<li><code>lpop key [count]</code>：从左开始弹出 <em>key</em> 对应 <em>count</em> 个值，返回的是弹出的值</li>
+<li><code>rpop key [count]</code>：从右开始弹出 <em>key</em> 对应 <em>count</em> 个值，返回的是弹出的值</li>
+</ol>
+<h2 id="3、lindex和llen命令"><a href="#3、lindex和llen命令" class="headerlink" title="3、lindex和llen命令"></a>3、lindex和llen命令</h2><ol>
+<li><code>lindex key index</code>：获取 <em>index</em> 对应的值</li>
+<li><code>llen key</code>：获取列表中元素的个数</li>
+</ol>
+<h2 id="4、lrem和ltrim命令"><a href="#4、lrem和ltrim命令" class="headerlink" title="4、lrem和ltrim命令"></a>4、lrem和ltrim命令</h2><ol>
+<li><code>lrem key count element</code>：删除 <em>count</em> 个值等于 <em>element</em> 的元素</li>
+<li><code>ltrim key start stop</code>：截取指定范围内的值后再赋值给 <em>key</em></li>
+</ol>
+<h2 id="5、rpoplpush命令"><a href="#5、rpoplpush命令" class="headerlink" title="5、rpoplpush命令"></a>5、rpoplpush命令</h2><ol>
+<li><code>rpoplpush source destination</code>：对 <em>surce</em> 执行 <code>rpop</code> 操作后，把 <strong>弹出的元素</strong> 再 <code>lpush</code> 到 <em>destination</em></li>
+</ol>
+<h2 id="6、lset和linsert命令"><a href="#6、lset和linsert命令" class="headerlink" title="6、lset和linsert命令"></a>6、lset和linsert命令</h2><ol>
+<li><code>lset key index element</code>：设置对应 <em>index</em> 位置的元素值为 <em>element</em></li>
+<li><code>linsert key before|after pivot element</code>：在对应 <em>pivot</em> 值的位置前|后，插入 <em>element</em> 值</li>
+</ol>
+<h1 id="Hash类型"><a href="#Hash类型" class="headerlink" title="Hash类型"></a>Hash类型</h1><h2 id="1、hset、hget、hmset、hmget、hgetall和hdel命令"><a href="#1、hset、hget、hmset、hmget、hgetall和hdel命令" class="headerlink" title="1、hset、hget、hmset、hmget、hgetall和hdel命令"></a>1、hset、hget、hmset、hmget、hgetall和hdel命令</h2><ol>
+<li><code>hset key field value [field value ...]</code>：设置 <em>key</em> 对应的键值对，可以设置多个</li>
+<li><code>hget key field</code>：获取 <em>key</em> 对应的键</li>
+<li><code>hmset key field value [field value ...]</code>：和 <code>hset</code> 用法差不多</li>
+<li><code>hmget key field [field ...]</code>：可以获取 <em>key</em> 多个键</li>
+<li><code>hgetall key</code>：可以获取 <em>key</em> 对应的多个键值对</li>
+<li><code>hdel key field [field ...]</code>：删除 <em>key</em> 多个键</li>
+</ol>
+<h2 id="2、hlen命令"><a href="#2、hlen命令" class="headerlink" title="2、hlen命令"></a>2、hlen命令</h2><ol>
+<li><code>hlen key</code>：获取 <em>key</em> 全部键的个数</li>
+</ol>
+<h2 id="3、hexists-命令"><a href="#3、hexists-命令" class="headerlink" title="3、hexists 命令"></a>3、hexists 命令</h2><ol>
+<li><code>hexists key field</code>：判断 <em>key</em> 对应的键是否存在，若存在则返回 1，不存在返回 0</li>
+</ol>
+<h2 id="4、hkeys和hvals命令"><a href="#4、hkeys和hvals命令" class="headerlink" title="4、hkeys和hvals命令"></a>4、hkeys和hvals命令</h2><ol>
+<li><code>hkeys key</code>：获取 <em>key</em> 所有的键</li>
+<li><code>hvals key</code>：获取 <em>key</em> 多有的值</li>
+</ol>
+<h2 id="5、hincrby和hincrbyfloat命令"><a href="#5、hincrby和hincrbyfloat命令" class="headerlink" title="5、hincrby和hincrbyfloat命令"></a>5、hincrby和hincrbyfloat命令</h2><ol>
+<li><code>hincrby key field increment</code>：给 <em>key</em> 对应的键值加上 <em>increment</em> ，但是键对应的值只能为数字，否则会报错</li>
+<li><code>hincrbyfloat key field increment</code>：给 <em>key</em> 对应的键值加上 <em>increment</em> ，<em>increment</em> 可以为浮点数</li>
+</ol>
+<h2 id="6、hsetnx命令"><a href="#6、hsetnx命令" class="headerlink" title="6、hsetnx命令"></a>6、hsetnx命令</h2><ol>
+<li><code>hsetnx key field value</code>：给 <em>key</em> 设置键值，但是这个键必须不存在，否则会报错</li>
+</ol>
+<h1 id="Set类型"><a href="#Set类型" class="headerlink" title="Set类型"></a>Set类型</h1>]]></content>
       <categories>
         <category>学习笔记</category>
       </categories>
