@@ -295,7 +295,65 @@
 <h2 id="6、hsetnx命令"><a href="#6、hsetnx命令" class="headerlink" title="6、hsetnx命令"></a>6、hsetnx命令</h2><ol>
 <li><code>hsetnx key field value</code>：给 <em>key</em> 设置键值，但是这个键必须不存在，否则会报错</li>
 </ol>
-<h1 id="Set类型"><a href="#Set类型" class="headerlink" title="Set类型"></a>Set类型</h1>]]></content>
+<h1 id="Set类型"><a href="#Set类型" class="headerlink" title="Set类型"></a>Set类型</h1><h2 id="基本命令"><a href="#基本命令" class="headerlink" title="基本命令"></a>基本命令</h2><h3 id="1、sadd命令"><a href="#1、sadd命令" class="headerlink" title="1、sadd命令"></a>1、sadd命令</h3><ol>
+<li><code>sadd key member [member ...]</code>：往 <em>key</em> 里面添加成员，可以添加多个，但不能重复</li>
+</ol>
+<h3 id="2、smembers命令"><a href="#2、smembers命令" class="headerlink" title="2、smembers命令"></a>2、smembers命令</h3><ol>
+<li><code>smembers key</code>：获取 <em>key</em> 全部的成员</li>
+</ol>
+<h3 id="3、sismember命令"><a href="#3、sismember命令" class="headerlink" title="3、sismember命令"></a>3、sismember命令</h3><ol>
+<li><code>sismember key member</code>：查看 <em>key</em> 是否有成员 <em>member</em> ，若没有则返回 0，有则返回 1</li>
+</ol>
+<h3 id="4、srem命令"><a href="#4、srem命令" class="headerlink" title="4、srem命令"></a>4、srem命令</h3><ol>
+<li><code>srem key member [member ...]</code>：删除 <em>key</em> 里面的成员，可以删除多个</li>
+</ol>
+<h3 id="5、scard命令"><a href="#5、scard命令" class="headerlink" title="5、scard命令"></a>5、scard命令</h3><ol>
+<li><code>scard key</code>：获取 <em>key</em> 里面的成员个数</li>
+</ol>
+<h3 id="6、srandmember命令"><a href="#6、srandmember命令" class="headerlink" title="6、srandmember命令"></a>6、srandmember命令</h3><ol>
+<li><code>srandmember key [count]</code>：随机获取 <em>key</em> 里面的 <em>count</em> 个成员，成员不删除</li>
+</ol>
+<h3 id="7、spop命令"><a href="#7、spop命令" class="headerlink" title="7、spop命令"></a>7、spop命令</h3><ol>
+<li><code>spop key [count]</code>：随机弹出 <em>key</em> 里面 <em>count</em> 个值，成员会删除</li>
+</ol>
+<h3 id="8、smove命令"><a href="#8、smove命令" class="headerlink" title="8、smove命令"></a>8、smove命令</h3><ol>
+<li><code>smove source destination member</code>：从 <code>source</code> 中移动成员到 <code>destination</code> 中</li>
+</ol>
+<h2 id="集合运算"><a href="#集合运算" class="headerlink" title="集合运算"></a>集合运算</h2><h3 id="1、差集运算-sdiff"><a href="#1、差集运算-sdiff" class="headerlink" title="1、差集运算(sdiff)"></a>1、差集运算(sdiff)</h3><ol>
+<li><code>sdiff key [key ...]</code>：获取两个 <em>key</em> 之间的差集，如 A-B，获取 A 中有的，B 中没有的</li>
+</ol>
+<h3 id="2、并集运算-sunion"><a href="#2、并集运算-sunion" class="headerlink" title="2、并集运算(sunion)"></a>2、并集运算(sunion)</h3><ol>
+<li><code>sunion key [key ...]</code>：获取两个 <em>key</em> 之间的并集</li>
+</ol>
+<h3 id="3、交集运算-sinter和sintercard"><a href="#3、交集运算-sinter和sintercard" class="headerlink" title="3、交集运算(sinter和sintercard)"></a>3、交集运算(sinter和sintercard)</h3><ol>
+<li><code>sinter key [key ...]</code>：获取两个 <em>key</em> 之间的交集</li>
+<li><code>sintercard numkeys key [key ...] [LIMIT limit]</code>：获取 <em>numkeys</em> 个 <em>key</em> 的交集元素个数，后面的 <em>limit</em> 表示显示几个</li>
+</ol>
+<h1 id="ZSet类型"><a href="#ZSet类型" class="headerlink" title="ZSet类型"></a>ZSet类型</h1><h2 id="1、zadd命令"><a href="#1、zadd命令" class="headerlink" title="1、zadd命令"></a>1、zadd命令</h2><ol>
+<li><code>zadd key [NX|XX] [GT|LT] [CH] [INCR] score member [score member ...]</code>：</li>
+</ol>
+<h2 id="2、zrange命令"><a href="#2、zrange命令" class="headerlink" title="2、zrange命令"></a>2、zrange命令</h2><ol>
+<li><code>zrange key start stop [byscore|bylex] [rev] [LIMIT offset count] [WITHSCORES]</code>：</li>
+</ol>
+<h2 id="3、zrevrange命令"><a href="#3、zrevrange命令" class="headerlink" title="3、zrevrange命令"></a>3、zrevrange命令</h2><ol>
+<li><code>zrevrange key start stop [WITHSCORES]</code>：</li>
+</ol>
+<h2 id="4、zrangebyscore命令"><a href="#4、zrangebyscore命令" class="headerlink" title="4、zrangebyscore命令"></a>4、zrangebyscore命令</h2><ol>
+<li><code>zrangebyscore key min max [WITHSCORES] [LIMIT offset count]</code>：</li>
+</ol>
+<h2 id="5、zscore命令"><a href="#5、zscore命令" class="headerlink" title="5、zscore命令"></a>5、zscore命令</h2><ol>
+<li><code>zscore key number</code>：</li>
+</ol>
+<h2 id="6、zcard命令"><a href="#6、zcard命令" class="headerlink" title="6、zcard命令"></a>6、zcard命令</h2><ol>
+<li><code>zcard key</code>：</li>
+</ol>
+<h2 id="7、zrem命令"><a href="#7、zrem命令" class="headerlink" title="7、zrem命令"></a>7、zrem命令</h2><ol>
+<li><code>zrem key member [member ...]</code>：</li>
+</ol>
+<h2 id="8、zincrby命令"><a href="#8、zincrby命令" class="headerlink" title="8、zincrby命令"></a>8、zincrby命令</h2><ol>
+<li><code>zincrby key increment member</code>：</li>
+</ol>
+]]></content>
       <categories>
         <category>学习笔记</category>
       </categories>
