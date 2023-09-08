@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>jvm</title>
+    <url>/posts/jvm/</url>
+    <content><![CDATA[]]></content>
+      <categories>
+        <category>学习笔记</category>
+      </categories>
+      <tags>
+        <tag>jvm</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>linux</title>
     <url>/posts/linux/</url>
     <content><![CDATA[<h1 id="vim编辑器"><a href="#vim编辑器" class="headerlink" title="vim编辑器"></a>vim编辑器</h1><h2 id="1、查找功能"><a href="#1、查找功能" class="headerlink" title="1、查找功能"></a>1、查找功能</h2><h3 id="（1）、匹配"><a href="#（1）、匹配" class="headerlink" title="（1）、匹配"></a>（1）、匹配</h3><ul>
@@ -399,28 +410,40 @@
 <li><code>sintercard numkeys key [key ...] [LIMIT limit]</code>：获取 <em>numkeys</em> 个 <em>key</em> 的交集元素个数，后面的 <em>limit</em> 表示显示几个</li>
 </ol>
 <h1 id="ZSet类型"><a href="#ZSet类型" class="headerlink" title="ZSet类型"></a>ZSet类型</h1><h2 id="1、zadd命令"><a href="#1、zadd命令" class="headerlink" title="1、zadd命令"></a>1、zadd命令</h2><ol>
-<li><code>zadd key [NX|XX] [GT|LT] [CH] [INCR] score member [score member ...]</code>：</li>
+<li><code>zadd key [NX|XX] [GT|LT] [CH] [INCR] score member [score member ...]</code>：往 <em>key</em> 里面添加成员和分数</li>
 </ol>
 <h2 id="2、zrange命令"><a href="#2、zrange命令" class="headerlink" title="2、zrange命令"></a>2、zrange命令</h2><ol>
-<li><code>zrange key start stop [byscore|bylex] [rev] [LIMIT offset count] [WITHSCORES]</code>：</li>
+<li><code>zrange key start stop [byscore|bylex] [rev] [LIMIT offset count] [WITHSCORES]</code>：遍历 <em>key</em> ，<em>withscores</em> 表示可以带着分数</li>
 </ol>
 <h2 id="3、zrevrange命令"><a href="#3、zrevrange命令" class="headerlink" title="3、zrevrange命令"></a>3、zrevrange命令</h2><ol>
-<li><code>zrevrange key start stop [WITHSCORES]</code>：</li>
+<li><code>zrevrange key start stop [WITHSCORES]</code>：反向遍历 <em>key</em> ，其他的和 <code>zrange</code> 一样</li>
 </ol>
 <h2 id="4、zrangebyscore命令"><a href="#4、zrangebyscore命令" class="headerlink" title="4、zrangebyscore命令"></a>4、zrangebyscore命令</h2><ol>
-<li><code>zrangebyscore key min max [WITHSCORES] [LIMIT offset count]</code>：</li>
+<li><code>zrangebyscore key min max [WITHSCORES] [LIMIT offset count]</code>：遍历 <em>key</em> ，从规定的最小值到最大值，即 <code>&gt;=,&lt;=</code> ，可以用 <em>offset</em> 指定返回的数量，如果 <em>min</em> 和 <em>max</em> 的左边带有<code>(</code>，如 <code>(min</code> 或者 <code>(max</code> ，表示 <code>&gt;</code> 或者 <code>&lt;</code></li>
 </ol>
 <h2 id="5、zscore命令"><a href="#5、zscore命令" class="headerlink" title="5、zscore命令"></a>5、zscore命令</h2><ol>
-<li><code>zscore key number</code>：</li>
+<li><code>zscore key member</code>：获取 <em>key</em> 对应成员的分数</li>
 </ol>
 <h2 id="6、zcard命令"><a href="#6、zcard命令" class="headerlink" title="6、zcard命令"></a>6、zcard命令</h2><ol>
-<li><code>zcard key</code>：</li>
+<li><code>zcard key</code>：获取 <em>key</em> 的成员个数</li>
 </ol>
 <h2 id="7、zrem命令"><a href="#7、zrem命令" class="headerlink" title="7、zrem命令"></a>7、zrem命令</h2><ol>
-<li><code>zrem key member [member ...]</code>：</li>
+<li><code>zrem key member [member ...]</code>：删除 <em>key</em> 的成员，可以删除多个</li>
 </ol>
 <h2 id="8、zincrby命令"><a href="#8、zincrby命令" class="headerlink" title="8、zincrby命令"></a>8、zincrby命令</h2><ol>
-<li><code>zincrby key increment member</code>：</li>
+<li><code>zincrby key increment member</code>：给 <em>key</em> 对应的成员分数增加 <em>increment</em></li>
+</ol>
+<h2 id="9、zcount命令"><a href="#9、zcount命令" class="headerlink" title="9、zcount命令"></a>9、zcount命令</h2><ol>
+<li><code>zcount key min max</code>：获得 <em>key</em> 在 <em>min</em> 到 <em>max</em> 范围内的成员个数</li>
+</ol>
+<h2 id="10、zmpop命令"><a href="#10、zmpop命令" class="headerlink" title="10、zmpop命令"></a>10、zmpop命令</h2><ol>
+<li><code>zmpop numkeys key [key ...] MIN|MAX [COUNT count]</code>：从 <em>numkeys</em> 个 <em>key</em> 中弹出最小(MIN)或最大(MAX)分数的成员，弹出 <em>count</em> 个</li>
+</ol>
+<h2 id="11、zrank命令"><a href="#11、zrank命令" class="headerlink" title="11、zrank命令"></a>11、zrank命令</h2><ol>
+<li><code>zrank key member [WITHSCORES]</code>：正序获取 <em>key</em> 对应成员的下标值</li>
+</ol>
+<h2 id="12、zrevrank命令"><a href="#12、zrevrank命令" class="headerlink" title="12、zrevrank命令"></a>12、zrevrank命令</h2><ol>
+<li><code>zrevrank key member [WITHSCORES]</code>：逆序获取 <em>key</em> 对应成员的下标值</li>
 </ol>
 ]]></content>
       <categories>
