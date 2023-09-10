@@ -275,22 +275,22 @@
     <url>/posts/redis/</url>
     <content><![CDATA[<h1 id="Redis-10大数据类型"><a href="#Redis-10大数据类型" class="headerlink" title="Redis 10大数据类型"></a>Redis 10大数据类型</h1><p>10大数据类型包括：<strong>String</strong>(字符串)，<strong>Bitmap</strong>(位图)，<strong>Bitfield</strong>(位域)，<strong>Hash</strong>(哈希表)，<strong>List</strong>(集合)，<strong>Set</strong>(列表)，<strong>Sorted set</strong>(有序集合 ZSet)，<strong>Geospatial</strong>(地理空间)，<strong>Hyperlog</strong>(基数统计)，<strong>Stream</strong>(流)</p>
 <h1 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h1><ol>
-<li><code>keys *</code>：查看当前库所有的key</li>
-<li><code>exists [key...]</code>：判断某个key是否存在，返回的数字为存在的key数量</li>
-<li><code>type key</code>：查看key是什么类型</li>
-<li><code>del [key...]</code>：删除指定的key数据，返回的数字为删除的key数量（原子性，若key很大，则在高并发情况下会产生阻塞队列）</li>
+<li><code>keys *</code>：查看当前库所有的 <em>key</em> </li>
+<li><code>exists [key...]</code>：判断某个 <em>key</em> 是否存在，返回的数字为存在的 <em>key</em> 数量</li>
+<li><code>type key</code>：查看 <em>key</em> 是什么类型</li>
+<li><code>del [key...]</code>：删除指定的 <em>key</em> 数据，返回的数字为删除的 <em>key</em> 数量（原子性，若key很大，则在高并发情况下会产生阻塞队列）</li>
 <li><code>unlink [key...]</code>：非阻塞删除，会在异步中操作（非阻塞，异步操作，不会产生阻塞队列）</li>
 <li><code>ttl key</code>：查看还有多少秒过期，-1表示永不过期，-2表示已过期</li>
-<li><code>expire key</code>：为给定的key设置过期时间</li>
-<li><code>move key dbindex[0-15]</code>：将当前数据库的key移动到给定的数据库db当中，dbindex直接输入数字即可</li>
-<li><code>select dbindex</code>：切换数据库[0-15]，默认为0</li>
-<li><code>dbsize</code>：查看当前数据库key的数量</li>
+<li><code>expire key</code>：为给定的 <em>key</em> 设置过期时间</li>
+<li><code>move key dbindex[0-15]</code>：将当前数据库的 <em>key</em> 移动到给定的数据库 <em>db</em> 当中，<em>dbindex</em> 直接输入数字即可</li>
+<li><code>select dbindex</code>：切换数据库[0-15]，默认为 0</li>
+<li><code>dbsize</code>：查看当前数据库 <em>key</em> 的数量</li>
 <li><code>flushdb</code>：清空当前库（很危险，尽量不要使用）</li>
 <li><code>flushall</code>：通杀全部库（更危险，最好不要使用）</li>
 </ol>
 <p>备注：</p>
 <blockquote>
-<p>命令不区分大小写，而key区分大小写</p>
+<p>命令不区分大小写，而 <em>key</em> 区分大小写</p>
 <p>永远的帮助命令，help @类型，如help @String，help @List，help @Hash</p>
 </blockquote>
 <h1 id="String类型"><a href="#String类型" class="headerlink" title="String类型"></a>String类型</h1><h2 id="1、set命令"><a href="#1、set命令" class="headerlink" title="1、set命令"></a>1、set命令</h2><ol>
@@ -352,9 +352,9 @@
 </ol>
 <h1 id="Hash类型"><a href="#Hash类型" class="headerlink" title="Hash类型"></a>Hash类型</h1><h2 id="1、hset、hget、hmset、hmget、hgetall和hdel命令"><a href="#1、hset、hget、hmset、hmget、hgetall和hdel命令" class="headerlink" title="1、hset、hget、hmset、hmget、hgetall和hdel命令"></a>1、hset、hget、hmset、hmget、hgetall和hdel命令</h2><ol>
 <li><code>hset key field value [field value ...]</code>：设置 <em>key</em> 对应的键值对，可以设置多个</li>
-<li><code>hget key field</code>：获取 <em>key</em> 对应的键</li>
+<li><code>hget key field</code>：获取 <em>key</em> 对应的键的值</li>
 <li><code>hmset key field value [field value ...]</code>：和 <code>hset</code> 用法差不多</li>
-<li><code>hmget key field [field ...]</code>：可以获取 <em>key</em> 多个键</li>
+<li><code>hmget key field [field ...]</code>：可以获取 <em>key</em> 多个键的值</li>
 <li><code>hgetall key</code>：可以获取 <em>key</em> 对应的多个键值对</li>
 <li><code>hdel key field [field ...]</code>：删除 <em>key</em> 多个键</li>
 </ol>
@@ -445,7 +445,33 @@
 <h2 id="12、zrevrank命令"><a href="#12、zrevrank命令" class="headerlink" title="12、zrevrank命令"></a>12、zrevrank命令</h2><ol>
 <li><code>zrevrank key member [WITHSCORES]</code>：逆序获取 <em>key</em> 对应成员的下标值</li>
 </ol>
-]]></content>
+<h1 id="Bitmap类型"><a href="#Bitmap类型" class="headerlink" title="Bitmap类型"></a>Bitmap类型</h1><p><em><strong>*************************************底层是 String*********************************</strong></em></p>
+<h2 id="1、setbit命令"><a href="#1、setbit命令" class="headerlink" title="1、setbit命令"></a>1、setbit命令</h2><ol>
+<li><code>setbit key offset value</code>：设置 <em>key</em> 的偏移量的值为多少，<em>offset</em> 从 0 开始，<strong><em>value</em> 只能为 0 或 1</strong></li>
+</ol>
+<h2 id="2、getbit命令"><a href="#2、getbit命令" class="headerlink" title="2、getbit命令"></a>2、getbit命令</h2><ol>
+<li><code>getbit key offset</code>：获得 <em>key</em> 偏移量 <em>offset</em> 的值</li>
+</ol>
+<h2 id="3、strlen命令"><a href="#3、strlen命令" class="headerlink" title="3、strlen命令"></a>3、strlen命令</h2><ol>
+<li><code>strlen key</code>：获得 <em>key</em> 占据几个字节，不是获得字符串的长度，超过 8 位后自己按照 8 位一组一byte再扩容</li>
+</ol>
+<h2 id="4、bitcount命令"><a href="#4、bitcount命令" class="headerlink" title="4、bitcount命令"></a>4、bitcount命令</h2><ol>
+<li><code>bitcount key [start end [BYTE|BIT]]</code>：获取  <em>key</em> 里面从 <em>start</em> 位到 <em>end</em> 位含有 1 的位数，默认是 <em>BYTE</em> 单位，最好是用 <em>BIT</em> 作为单位</li>
+</ol>
+<h2 id="5、bitop命令"><a href="#5、bitop命令" class="headerlink" title="5、bitop命令"></a>5、bitop命令</h2><ol>
+<li><code>BITOP AND|OR|XOR|NOT destkey key [key ...]</code>：让多个 <em>key</em> 可以进行 <em><strong>位运算</strong></em> (与  或  异或  非)，结果给 <em>destkey</em></li>
+</ol>
+<h1 id="HyperLogLog类型"><a href="#HyperLogLog类型" class="headerlink" title="HyperLogLog类型"></a>HyperLogLog类型</h1><p><em><strong>*************************************基数统计*********************************</strong></em></p>
+<h2 id="1、pfadd命令"><a href="#1、pfadd命令" class="headerlink" title="1、pfadd命令"></a>1、pfadd命令</h2><ol>
+<li><code>pfadd key [element [element ...]]</code>：往 <em>key</em> 里面插入 <em>element</em> 元素</li>
+</ol>
+<h2 id="2、pfcount命令"><a href="#2、pfcount命令" class="headerlink" title="2、pfcount命令"></a>2、pfcount命令</h2><ol>
+<li><code>pfcount key [key ...]</code>：去掉重复的元素后，统计剩下的元素个数，多个 <em>key</em> ，会统计总的去掉重复元素之后的个数</li>
+</ol>
+<h2 id="3、pfmerge命令"><a href="#3、pfmerge命令" class="headerlink" title="3、pfmerge命令"></a>3、pfmerge命令</h2><ol>
+<li><code>pfmerge destkey [sourcekey [sourcekey ...]]</code>：合并多个 <em>sourcekey</em> 到 <em>destkey</em> 中，并去掉重复元素</li>
+</ol>
+<h1 id="GEO类型"><a href="#GEO类型" class="headerlink" title="GEO类型"></a>GEO类型</h1>]]></content>
       <categories>
         <category>学习笔记</category>
       </categories>
