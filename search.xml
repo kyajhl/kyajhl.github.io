@@ -551,7 +551,7 @@
 <h2 id="5、bitop命令"><a href="#5、bitop命令" class="headerlink" title="5、bitop命令"></a>5、bitop命令</h2><ol>
 <li><code>BITOP AND|OR|XOR|NOT destkey key [key ...]</code>：让多个 <em>key</em> 可以进行 <em><strong>位运算</strong></em> (与  或  异或  非)，结果给 <em>destkey</em></li>
 </ol>
-<h1 id="HyperLogLog类型"><a href="#HyperLogLog类型" class="headerlink" title="HyperLogLog类型"></a>HyperLogLog类型</h1><p><em><strong>*************************************基数统计*********************************</strong></em></p>
+<h1 id="HyperLogLog类型"><a href="#HyperLogLog类型" class="headerlink" title="HyperLogLog类型"></a>HyperLogLog类型</h1><p><em><strong>*************************************基数统计，底层是String*********************************</strong></em></p>
 <h2 id="1、pfadd命令"><a href="#1、pfadd命令" class="headerlink" title="1、pfadd命令"></a>1、pfadd命令</h2><ol>
 <li><code>pfadd key [element [element ...]]</code>：往 <em>key</em> 里面插入 <em>element</em> 元素</li>
 </ol>
@@ -561,7 +561,30 @@
 <h2 id="3、pfmerge命令"><a href="#3、pfmerge命令" class="headerlink" title="3、pfmerge命令"></a>3、pfmerge命令</h2><ol>
 <li><code>pfmerge destkey [sourcekey [sourcekey ...]]</code>：合并多个 <em>sourcekey</em> 到 <em>destkey</em> 中，并去掉重复元素</li>
 </ol>
-<h1 id="GEO类型"><a href="#GEO类型" class="headerlink" title="GEO类型"></a>GEO类型</h1>]]></content>
+<h1 id="GEO类型"><a href="#GEO类型" class="headerlink" title="GEO类型"></a>GEO类型</h1><p><em><strong>*************************************底层是ZSet*********************************</strong></em></p>
+<p><em><strong>**************************中文乱码，在redis-cli后面加上–raw*************************</strong></em></p>
+<h2 id="1、geoadd命令"><a href="#1、geoadd命令" class="headerlink" title="1、geoadd命令"></a>1、geoadd命令</h2><ol>
+<li><code>geoadd key [NX|XX] [CH] longitude latitude member [longitude latitude member ...]</code>：<em>longitude</em> 经度，<em>latitude</em> 纬度，<em>member</em> 位置名称</li>
+</ol>
+<h2 id="2、geopos命令"><a href="#2、geopos命令" class="headerlink" title="2、geopos命令"></a>2、geopos命令</h2><ol>
+<li><code>geopos key [member [member ...]]</code>：返回经纬度</li>
+</ol>
+<h2 id="3、geohash命令"><a href="#3、geohash命令" class="headerlink" title="3、geohash命令"></a>3、geohash命令</h2><ol>
+<li><code>geohash key [member [member ...]]</code>：返回经纬度坐标的geohash表示</li>
+</ol>
+<h2 id="4、geodist命令"><a href="#4、geodist命令" class="headerlink" title="4、geodist命令"></a>4、geodist命令</h2><ol>
+<li><code>geodist key member1 member2 [M|KM|FT|MI]</code>：两个位置之间的距离，后面跟单位 <em>KM</em> 千米，<em>M</em> 米，<em>FT</em> 英尺，<em>MI</em> 英里</li>
+</ol>
+<h2 id="5、georadius命令"><a href="#5、georadius命令" class="headerlink" title="5、georadius命令"></a>5、georadius命令</h2><ol>
+<li><code>georadius key longitude latitude radius M|KM|FT|MI [WITHCOORD] [WITHDIST] [WITHHASH] [COUNT count [ANY]] [ASC|DESC] [STORE key|STOREDIST key]</code>：以给定的经纬度为中心，返回键包含的位置元素当中，与中心的距离不超过给定最大距离(<em><strong>radius</strong></em>)的所有位置元素，<em><strong>withdist</strong></em>：返回位置元素的同时，将位置元素与中心之间的距离也一并返回，<em><strong>withcoord</strong></em>：将位置元素的经度与纬度一并返回，<em><strong>withhash</strong></em>：以52位有符号整数的形式，返回位置元素经过原始<em><strong>geohash</strong></em>编码的有序集合分值，<em><strong>count</strong></em>：限定返回的记录数</li>
+</ol>
+<h2 id="6、georadiusbymember命令"><a href="#6、georadiusbymember命令" class="headerlink" title="6、georadiusbymember命令"></a>6、georadiusbymember命令</h2><ol>
+<li><code>georadiusbymember key member radius M|KM|FT|MI [WITHCOORD] [WITHDIST] [WITHHASH] [COUNT count [ANY]] [ASC|DESC] [STORE key|STOREDIST key]</code>：根据位置名称查找，和 <em><strong>georadius</strong></em> 的用法差不多</li>
+</ol>
+<h1 id="Stream类型"><a href="#Stream类型" class="headerlink" title="Stream类型"></a>Stream类型</h1><h2 id="队列相关指令"><a href="#队列相关指令" class="headerlink" title="队列相关指令"></a>队列相关指令</h2><h3 id="1、xadd命令"><a href="#1、xadd命令" class="headerlink" title="1、xadd命令"></a>1、xadd命令</h3><ol>
+<li><code>xadd key [NOMKSTREAM] [MAXLEN|MINID [=|~] threshold [LIMIT count]] *|id field value [field value ...]</code>：</li>
+</ol>
+<h3 id="2、xtrim命令"><a href="#2、xtrim命令" class="headerlink" title="2、xtrim命令"></a>2、xtrim命令</h3><h3 id="3、xdel命令"><a href="#3、xdel命令" class="headerlink" title="3、xdel命令"></a>3、xdel命令</h3><h3 id="4、xlen命令"><a href="#4、xlen命令" class="headerlink" title="4、xlen命令"></a>4、xlen命令</h3><h3 id="5、xrange命令"><a href="#5、xrange命令" class="headerlink" title="5、xrange命令"></a>5、xrange命令</h3><h3 id="6、xrevrange命令"><a href="#6、xrevrange命令" class="headerlink" title="6、xrevrange命令"></a>6、xrevrange命令</h3><h3 id="7、xread命令"><a href="#7、xread命令" class="headerlink" title="7、xread命令"></a>7、xread命令</h3><h2 id="消费组相关指令"><a href="#消费组相关指令" class="headerlink" title="消费组相关指令"></a>消费组相关指令</h2>]]></content>
       <categories>
         <category>学习笔记</category>
       </categories>
