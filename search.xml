@@ -661,9 +661,42 @@
 <li><code>georadiusbymember key member radius M|KM|FT|MI [WITHCOORD] [WITHDIST] [WITHHASH] [COUNT count [ANY]] [ASC|DESC] [STORE key|STOREDIST key]</code>：根据位置名称查找，和 <em><strong>georadius</strong></em> 的用法差不多</li>
 </ol>
 <h1 id="Stream类型"><a href="#Stream类型" class="headerlink" title="Stream类型"></a>Stream类型</h1><h2 id="队列相关指令"><a href="#队列相关指令" class="headerlink" title="队列相关指令"></a>队列相关指令</h2><h3 id="1、xadd命令"><a href="#1、xadd命令" class="headerlink" title="1、xadd命令"></a>1、xadd命令</h3><ol>
-<li><code>xadd key [NOMKSTREAM] [MAXLEN|MINID [=|~] threshold [LIMIT count]] *|id field value [field value ...]</code>：</li>
+<li><code>xadd key [NOMKSTREAM] [MAXLEN|MINID [=|~] threshold [LIMIT count]] *|id field value [field value ...]</code>：添加消息到队列末尾，* 表示自动生成 <em><strong>MessageID</strong></em>，若不加 <em>，则要自己手动加 <em><strong>ID</strong></em>，后面顺序跟着一堆业务 <em><strong>field</strong></em>，</em><strong>value</strong>*</li>
 </ol>
-<h3 id="2、xtrim命令"><a href="#2、xtrim命令" class="headerlink" title="2、xtrim命令"></a>2、xtrim命令</h3><h3 id="3、xdel命令"><a href="#3、xdel命令" class="headerlink" title="3、xdel命令"></a>3、xdel命令</h3><h3 id="4、xlen命令"><a href="#4、xlen命令" class="headerlink" title="4、xlen命令"></a>4、xlen命令</h3><h3 id="5、xrange命令"><a href="#5、xrange命令" class="headerlink" title="5、xrange命令"></a>5、xrange命令</h3><h3 id="6、xrevrange命令"><a href="#6、xrevrange命令" class="headerlink" title="6、xrevrange命令"></a>6、xrevrange命令</h3><h3 id="7、xread命令"><a href="#7、xread命令" class="headerlink" title="7、xread命令"></a>7、xread命令</h3><h2 id="消费组相关指令"><a href="#消费组相关指令" class="headerlink" title="消费组相关指令"></a>消费组相关指令</h2>]]></content>
+<h3 id="2、xtrim命令"><a href="#2、xtrim命令" class="headerlink" title="2、xtrim命令"></a>2、xtrim命令</h3><ol>
+<li><code>xtrim key MAXLEN|MINID [=|~] threshold [LIMIT count]</code>：对 <em><strong>Stream</strong></em> 的长度进行截取，<em><strong>maxlen</strong></em> 允许的最大长度，<em><strong>minid</strong></em> 允许的最小 <em><strong>id</strong></em></li>
+</ol>
+<h3 id="3、xdel命令"><a href="#3、xdel命令" class="headerlink" title="3、xdel命令"></a>3、xdel命令</h3><ol>
+<li><code>xdel key id [id ...]</code>：删除 <em><strong>key</strong></em> 对应的 <em><strong>id</strong></em></li>
+</ol>
+<h3 id="4、xlen命令"><a href="#4、xlen命令" class="headerlink" title="4、xlen命令"></a>4、xlen命令</h3><ol>
+<li><code>xlen key</code>：获取 <em><strong>key</strong></em> 里面成员的数量</li>
+</ol>
+<h3 id="5、xrange命令"><a href="#5、xrange命令" class="headerlink" title="5、xrange命令"></a>5、xrange命令</h3><ol>
+<li><code>xrange key start end [COUNT count]</code>：<em><strong>start</strong></em> 表示开始值，<code>-</code>代表最小值，<em><strong>end</strong></em> 表示结束值，<code>+</code> 代表最大值，<em><strong>count</strong></em> 代表最多可以获取多少个值</li>
+</ol>
+<h3 id="6、xrevrange命令"><a href="#6、xrevrange命令" class="headerlink" title="6、xrevrange命令"></a>6、xrevrange命令</h3><ol>
+<li><code>xrevrange key end start [COUNT count]</code>：<em><strong>end</strong></em> 取 <code>+</code>，<em><strong>start</strong></em> 取 <code>-</code></li>
+</ol>
+<h3 id="7、xread命令"><a href="#7、xread命令" class="headerlink" title="7、xread命令"></a>7、xread命令</h3><ol>
+<li><code>xread [COUNT count] [BLOCK milliseconds] STREAMS key [key ...] id [id ...]</code>：<em><strong>count</strong></em> 最多读取多少条消息，<em><strong>block</strong></em> 是否已阻塞的方式读取消息，默认不阻塞，如果 <code>milliseconds</code> 设置为 0，表示永远阻塞，***$*** 表示从尾，<em><strong>0</strong></em> 表示从头</li>
+</ol>
+<h2 id="消费组相关指令"><a href="#消费组相关指令" class="headerlink" title="消费组相关指令"></a>消费组相关指令</h2><h3 id="1、xgroup-create指令"><a href="#1、xgroup-create指令" class="headerlink" title="1、xgroup create指令"></a>1、xgroup create指令</h3><ol>
+<li><code>xgroup create key group id|$ [MKSTREAM] [ENTRIESREAD entries-read]</code>：用于创建消费者组</li>
+</ol>
+<h3 id="2、xreadgroup命令"><a href="#2、xreadgroup命令" class="headerlink" title="2、xreadgroup命令"></a>2、xreadgroup命令</h3><ol>
+<li><code>GROUP group consumer [COUNT count] [BLOCK milliseconds] [NOACK] STREAMS key [key ...] id [id ...]</code>：<code>&gt;</code> 表示从第一条尚未被消费的消息开始读取，消费组 <em>group</em> 内的消费者 <em>consumer</em> 从 <em>key</em> 消息队列中读取所有消息</li>
+</ol>
+<h3 id="3、xpending命令"><a href="#3、xpending命令" class="headerlink" title="3、xpending命令"></a>3、xpending命令</h3><ol>
+<li><code>xpending key group [[IDLE min-idle-time] start end count [consumer]]</code>：查询每个消费组内所有消费者(已读取，但尚未确认)的消息，查看某个消费者具体读了哪些数据</li>
+</ol>
+<h3 id="4、xack命令"><a href="#4、xack命令" class="headerlink" title="4、xack命令"></a>4、xack命令</h3><ol>
+<li><code>xack key group id [id ...]</code>：向消息队列确认消息处理已完成</li>
+</ol>
+<h3 id="5、xinfo-stream命令"><a href="#5、xinfo-stream命令" class="headerlink" title="5、xinfo stream命令"></a>5、xinfo stream命令</h3><ol>
+<li><code>xinfo stream key [FULL [COUNT count]]</code>：用于打印 Stream\Consumer\Group的详细信息</li>
+</ol>
+]]></content>
       <categories>
         <category>学习笔记</category>
       </categories>
