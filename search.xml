@@ -1,45 +1,532 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>jvm</title>
-    <url>/posts/jvm/</url>
-    <content><![CDATA[]]></content>
+    <title>mybatis动态sql</title>
+    <url>/posts/mybatis%E5%8A%A8%E6%80%81sql/</url>
+    <content><![CDATA[<h1 id="if-标签"><a href="#if-标签" class="headerlink" title="if 标签"></a>if 标签</h1><p>可以判断是否符合条件，再进行赋值查询</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">&quot;xxx&quot;</span> <span class="attr">parameterType</span>=<span class="string">&quot;User&quot;</span> <span class="attr">resultMap</span>=<span class="string">&quot;baseMap&quot;</span>&gt;</span></span><br><span class="line">	select * </span><br><span class="line">    from tb_user</span><br><span class="line">    where 1=1</span><br><span class="line">    <span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">&quot;userName != null&quot;</span>&gt;</span></span><br><span class="line">        and user_name=#&#123;userName&#125;</span><br><span class="line">    <span class="tag">&lt;/<span class="name">if</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">&quot;realName != null&quot;</span>&gt;</span></span><br><span class="line">        and real_name=#&#123;realName&#125;</span><br><span class="line">    <span class="tag">&lt;/<span class="name">if</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">&quot;age &gt; 0&quot;</span>&gt;</span></span><br><span class="line">        and age=#&#123;age&#125;</span><br><span class="line">    <span class="tag">&lt;/<span class="name">if</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">&quot;id != null&quot;</span>&gt;</span></span><br><span class="line">        and id=#&#123;id&#125;</span><br><span class="line">    <span class="tag">&lt;/<span class="name">if</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="where-标签"><a href="#where-标签" class="headerlink" title="where 标签"></a>where 标签</h1><p>在写**<code>where</code><strong>的时候，为了保证 <strong><code>SQL</code></strong> 的的语法正确，在有</strong><code>and</code><strong>的情况下，可以用</strong><code>1=1</code><strong>表达式，若不想这么写的话，可以用</strong><code>where</code>**标签</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">&quot;xxx&quot;</span> <span class="attr">parameterType</span>=<span class="string">&quot;User&quot;</span> <span class="attr">resultMap</span>=<span class="string">&quot;baseMap&quot;</span>&gt;</span></span><br><span class="line">	select * </span><br><span class="line">	from tb_user</span><br><span class="line">    <span class="tag">&lt;<span class="name">where</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">&quot;userName != null&quot;</span>&gt;</span></span><br><span class="line">            and user_name=#&#123;userName&#125;</span><br><span class="line">        <span class="tag">&lt;/<span class="name">if</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">&quot;realName != null&quot;</span>&gt;</span></span><br><span class="line">            and real_name=#&#123;realName&#125;</span><br><span class="line">        <span class="tag">&lt;/<span class="name">if</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">&quot;age &gt; 0&quot;</span>&gt;</span></span><br><span class="line">            and age=#&#123;age&#125;</span><br><span class="line">        <span class="tag">&lt;/<span class="name">if</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">&quot;id != null&quot;</span>&gt;</span></span><br><span class="line">            and id=#&#123;id&#125;</span><br><span class="line">        <span class="tag">&lt;/<span class="name">if</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">where</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="choose-标签"><a href="#choose-标签" class="headerlink" title="choose 标签"></a>choose 标签</h1><p>**<code>choose</code><strong>相当于Java中的</strong><code>switch</code><strong>语句，若第一个不成立，则执行第二个，若第二个也不成立，则执行最后的</strong><code>otherwise</code>**标签里面的内容</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">&quot;xxx&quot;</span> <span class="attr">parameterType</span>=<span class="string">&quot;User&quot;</span> <span class="attr">resultMap</span>=<span class="string">&quot;baseMap&quot;</span>&gt;</span></span><br><span class="line">	select * </span><br><span class="line">	from tb_user</span><br><span class="line">    <span class="tag">&lt;<span class="name">where</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">choose</span>&gt;</span></span><br><span class="line">        	<span class="tag">&lt;<span class="name">when</span> <span class="attr">test</span>=<span class="string">&quot;userName != null&quot;</span>&gt;</span></span><br><span class="line">            	and user_name = #&#123;userName&#125;</span><br><span class="line">            <span class="tag">&lt;/<span class="name">when</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">when</span> <span class="attr">test</span>=<span class="string">&quot;realName != null&quot;</span>&gt;</span></span><br><span class="line">            	and real_name = #&#123;realName&#125;</span><br><span class="line">            <span class="tag">&lt;/<span class="name">when</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">otherwise</span>&gt;</span></span><br><span class="line">            	order by id desc</span><br><span class="line">            <span class="tag">&lt;/<span class="name">otherwise</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">choose</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">where</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="set-标签"><a href="#set-标签" class="headerlink" title="set 标签"></a>set 标签</h1><p>可以去掉多余的 <strong><code>,</code></strong>  ，避免了**<code>SQL</code>**报错</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">update</span> <span class="attr">id</span>=<span class="string">&quot;xxx&quot;</span> <span class="attr">parameterType</span>=<span class="string">&quot;User&quot;</span>&gt;</span></span><br><span class="line">	update </span><br><span class="line">    	tb_user</span><br><span class="line">	<span class="tag">&lt;<span class="name">set</span>&gt;</span></span><br><span class="line">    	<span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">&quot;userName != null&quot;</span>&gt;</span></span><br><span class="line">        	user_name = #&#123;userName&#125;,</span><br><span class="line">        <span class="tag">&lt;/<span class="name">if</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">&quot;realName != null&quot;</span>&gt;</span></span><br><span class="line">            real_name = #&#123;realName&#125;,</span><br><span class="line">        <span class="tag">&lt;/<span class="name">if</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">&quot;age &gt; 0&quot;</span>&gt;</span></span><br><span class="line">            age = #&#123;age&#125;,</span><br><span class="line">        <span class="tag">&lt;/<span class="name">if</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">set</span>&gt;</span></span><br><span class="line">    where</span><br><span class="line">    	id = #&#123;id&#125;</span><br><span class="line"><span class="tag">&lt;/<span class="name">update</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="trim-标签"><a href="#trim-标签" class="headerlink" title="trim 标签"></a>trim 标签</h1><p><strong><code>trim</code><strong>标签可以完成 <strong><code>where</code></strong> 或者 <strong><code>set</code></strong> 标签的功能，</strong><code>prefix</code><strong>表示前缀为</strong>where</strong>标签，**<code>prefixOverrides</code><strong>表示去掉前面多余的</strong>and**</p>
+<ul>
+<li>第一种</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">&quot;xxx&quot;</span> <span class="attr">parameterType</span>=<span class="string">&quot;User&quot;</span> <span class="attr">resultMap</span>=<span class="string">&quot;baseMap&quot;</span>&gt;</span></span><br><span class="line">	select *</span><br><span class="line">	from tb_user</span><br><span class="line">	<span class="tag">&lt;<span class="name">trim</span> <span class="attr">prefix</span>=<span class="string">&quot;where&quot;</span> <span class="attr">prefixOverrides</span>=<span class="string">&quot;AND | OR&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">&quot;userName != null&quot;</span>&gt;</span></span><br><span class="line">        	and user_name = #&#123;userName&#125;</span><br><span class="line">        <span class="tag">&lt;/<span class="name">if</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">&quot;realName != null&quot;</span>&gt;</span></span><br><span class="line">            and real_name = #&#123;realName&#125;</span><br><span class="line">        <span class="tag">&lt;/<span class="name">if</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">&quot;age &gt; 0&quot;</span>&gt;</span></span><br><span class="line">            and age = #&#123;age&#125;</span><br><span class="line">        <span class="tag">&lt;/<span class="name">if</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">trim</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>**<code>suffixOverrides</code>**表示去掉后面多余的 <strong><code>,</code></strong></p>
+<ul>
+<li>第二种</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">update</span> <span class="attr">id</span>=<span class="string">&quot;xxx&quot;</span> <span class="attr">parameterType</span>=<span class="string">&quot;User&quot;</span>&gt;</span></span><br><span class="line">	update</span><br><span class="line">    	tb_user</span><br><span class="line">	<span class="tag">&lt;<span class="name">trim</span> <span class="attr">prefix</span>=<span class="string">&quot;set&quot;</span> <span class="attr">suffixOverrides</span>=<span class="string">&quot;,&quot;</span>&gt;</span></span><br><span class="line">    	<span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">&quot;userName != null&quot;</span>&gt;</span></span><br><span class="line">        	user_name = #&#123;userName&#125;,</span><br><span class="line">        <span class="tag">&lt;/<span class="name">if</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">&quot;realName != null&quot;</span>&gt;</span></span><br><span class="line">            real_name = #&#123;realName&#125;,</span><br><span class="line">        <span class="tag">&lt;/<span class="name">if</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">&quot;age &gt; 0&quot;</span>&gt;</span></span><br><span class="line">            age = #&#123;age&#125;,</span><br><span class="line">        <span class="tag">&lt;/<span class="name">if</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">trim</span>&gt;</span></span><br><span class="line">    where</span><br><span class="line">    	id = #&#123;id&#125;</span><br><span class="line"><span class="tag">&lt;/<span class="name">update</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="forEach-标签"><a href="#forEach-标签" class="headerlink" title="forEach 标签"></a>forEach 标签</h1><p><strong><code>forEach</code></strong> 标签可以对集合进行遍历，**<code>open</code><strong>表示开始的括号，</strong><code>close</code><strong>表示最后的括号，</strong><code>separator</code><strong>表示用 <strong><code>,</code></strong> 分割，</strong><code>item</code>**表示每一个元素</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">&quot;xxx&quot;</span> <span class="attr">parameterType</span>=<span class="string">&quot;list&quot;</span> <span class="attr">resultMap</span>=<span class="string">&quot;baseMap&quot;</span>&gt;</span></span><br><span class="line">	select *</span><br><span class="line">	from tb_user</span><br><span class="line">	<span class="tag">&lt;<span class="name">where</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">&quot;ids != null&quot;</span>&gt;</span></span><br><span class="line">        	id in</span><br><span class="line">            <span class="tag">&lt;<span class="name">foreach</span> <span class="attr">collection</span>=<span class="string">&quot;ids&quot;</span> <span class="attr">open</span>=<span class="string">&quot;(&quot;</span> <span class="attr">close</span>=<span class="string">&quot;)&quot;</span> <span class="attr">separator</span>=<span class="string">&quot;,&quot;</span> <span class="attr">item</span>=<span class="string">&quot;id&quot;</span>&gt;</span></span><br><span class="line">                #&#123;id&#125;</span><br><span class="line">            <span class="tag">&lt;/<span class="name">foreach</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">if</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">where</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="bind-标签"><a href="#bind-标签" class="headerlink" title="bind 标签"></a>bind 标签</h1><p>**<code>bind</code><strong>标签允许在</strong><code>OGNL</code>**表达式以外创建一个变量，将该变量绑定到上下文中，可以供后续使用</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">&quot;xxx&quot;</span> <span class="attr">parameterType</span>=<span class="string">&quot;User&quot;</span> <span class="attr">resultMap</span>=<span class="string">&quot;baseMap&quot;</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- &lt;bind name=&quot;userNameLike&quot; value=&quot;&#x27;%&#x27;+_parameter.getUserName()+&#x27;%&#x27;&quot;/&gt; --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">bind</span> <span class="attr">name</span>=<span class="string">&quot;userNameLike&quot;</span> <span class="attr">value</span>=<span class="string">&quot;&#x27;%&#x27; + userName + &#x27;%&#x27;&quot;</span>/&gt;</span></span><br><span class="line">	select *</span><br><span class="line">	from tb_user</span><br><span class="line">	<span class="tag">&lt;<span class="name">where</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">&quot;userName != null&quot;</span>&gt;</span></span><br><span class="line">        	user_name like #&#123;userNameLike&#125;</span><br><span class="line">        <span class="tag">&lt;/<span class="name">if</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">where</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+
+]]></content>
       <categories>
         <category>学习笔记</category>
       </categories>
       <tags>
-        <tag>jvm</tag>
+        <tag>mybatis</tag>
       </tags>
   </entry>
   <entry>
-    <title>linux</title>
-    <url>/posts/linux/</url>
-    <content><![CDATA[<h1 id="vim编辑器"><a href="#vim编辑器" class="headerlink" title="vim编辑器"></a>vim编辑器</h1><h2 id="1、查找功能"><a href="#1、查找功能" class="headerlink" title="1、查找功能"></a>1、查找功能</h2><h3 id="（1）、匹配"><a href="#（1）、匹配" class="headerlink" title="（1）、匹配"></a>（1）、匹配</h3><ul>
-<li><p>片段匹配</p>
-<ol>
-<li>从上往下找，比如“hello”：&#x2F;hello</li>
-<li>从下往上找，比如”hello“：?hello</li>
-</ol>
+    <title>Markdown语法</title>
+    <url>/posts/Markdown%E8%AF%AD%E6%B3%95/</url>
+    <content><![CDATA[<h1 id="Markdown-基础语法"><a href="#Markdown-基础语法" class="headerlink" title="Markdown 基础语法"></a>Markdown 基础语法</h1><h2 id="1-Markdown-标题"><a href="#1-Markdown-标题" class="headerlink" title="(1) Markdown 标题"></a>(1) Markdown 标题</h2><figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 一级标题</span></span><br><span class="line"><span class="comment">## 二级标题</span></span><br><span class="line"><span class="comment">### 三级标题</span></span><br><span class="line"><span class="comment">#### 四级标题</span></span><br><span class="line"><span class="comment">##### 五级标题</span></span><br><span class="line"><span class="comment">###### 六级标题</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="2-Markdown-文本"><a href="#2-Markdown-文本" class="headerlink" title="(2) Markdown 文本"></a>(2) Markdown 文本</h2><figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="string">*斜体文本*</span></span><br><span class="line"><span class="string">**粗体文本**</span></span><br><span class="line"><span class="string">***斜粗体文本***</span></span><br><span class="line"><span class="string">_斜体文本_</span></span><br><span class="line"><span class="string">__粗体文本__</span></span><br><span class="line"><span class="string">___斜粗体文本___</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="例如"><a href="#例如" class="headerlink" title="例如"></a>例如</h3><p><em>斜体文本</em></p>
+<p><strong>粗体文本</strong></p>
+<p><em><strong>斜粗体文本</strong></em></p>
+<p><em>斜体文本</em></p>
+<p><strong>粗体文本</strong></p>
+<p><em><strong>斜粗体文本</strong></em></p>
+<h2 id="3-Markdown-列表"><a href="#3-Markdown-列表" class="headerlink" title="(3) Markdown 列表"></a>(3) Markdown 列表</h2><ul>
+<li>无序列表，使用 <strong>星号</strong>(<em>****)、<strong>加号</strong>(</em><em>+<strong>)、</strong>减号*</em>(<strong>-</strong>) 加一个 <strong>空格</strong> 作为列表标记</li>
+<li>有序列表，使用 <strong>数字</strong>再加上 (<strong>.</strong>) <strong>号</strong>，再加上一个 <strong>空格</strong> 作为列表标记</li>
+</ul>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="string">*</span> <span class="string">无序列表</span> <span class="number">1</span></span><br><span class="line"><span class="string">+</span> <span class="string">无序列表</span> <span class="number">2</span></span><br><span class="line"><span class="bullet">-</span> <span class="string">无需列表</span> <span class="number">3</span></span><br><span class="line"></span><br><span class="line"><span class="number">1</span><span class="string">.</span> <span class="string">有序列表</span> <span class="number">1</span></span><br><span class="line"><span class="number">2</span><span class="string">.</span> <span class="string">有序列表</span> <span class="number">2</span></span><br><span class="line"><span class="number">3</span><span class="string">.</span> <span class="string">有序列表</span> <span class="number">3</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="例如-1"><a href="#例如-1" class="headerlink" title="例如"></a>例如</h3><ul>
+<li><p>无序列表 1</p>
 </li>
-<li><p>精确匹配</p>
-<p>如果你输入“&#x2F;the”，你也可能找到“three“。</p>
-<ol>
-<li>只匹配单词开头：&#x2F;\&lt;the</li>
-<li>只匹配单词结尾：&#x2F;the\&gt;</li>
-<li>完整匹配单词：&#x2F;\&lt;the\&gt;</li>
-</ol>
+<li><p>无序列表 2</p>
+<ul>
+<li>无序列表 3</li>
+</ul>
 </li>
 </ul>
-<h3 id="（2）、正则表达式"><a href="#（2）、正则表达式" class="headerlink" title="（2）、正则表达式"></a>（2）、正则表达式</h3><ol>
-<li>”.“：通配一个字符，如匹配server，可以用&#x2F;se…r，一个”.“只匹配一个字符</li>
-<li>”*“：统配多个字符，如匹配server，可以用s*r，一个”*“可以匹配多个字符</li>
+<ol>
+<li>有序列表 1</li>
+<li>有序列表 2</li>
+<li>有序列表 3</li>
 </ol>
-<h3 id="（3）、快速查找"><a href="#（3）、快速查找" class="headerlink" title="（3）、快速查找"></a>（3）、快速查找</h3>]]></content>
+<h2 id="4-Markdown-链接"><a href="#4-Markdown-链接" class="headerlink" title="(4) Markdown 链接"></a>(4) Markdown 链接</h2><figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line">[<span class="string">链接名称</span>]<span class="string">(链接地址)</span></span><br><span class="line">[<span class="string">百度</span>]<span class="string">(https://www.baidu.com)</span></span><br><span class="line"></span><br><span class="line"><span class="string">或者</span></span><br><span class="line"></span><br><span class="line"><span class="string">&lt;链接地址&gt;</span></span><br><span class="line"><span class="string">&lt;https://www.baidu.com&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="例如-2"><a href="#例如-2" class="headerlink" title="例如"></a>例如</h3><p><a href="https://www.baidu.com/">百度</a></p>
+<p><a href="https://www.baidu.com/">https://www.baidu.com</a></p>
+<h2 id="5-Markdown-引用"><a href="#5-Markdown-引用" class="headerlink" title="(5) Markdown 引用"></a>(5) Markdown 引用</h2><p>引用的格式是在符号 <strong>&gt;</strong> 后面书写文字，或者加一个空格在书写文字</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="string">&gt;这是一个引用</span></span><br><span class="line"><span class="string">&gt;</span> <span class="string">这是一个引用</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="例如-3"><a href="#例如-3" class="headerlink" title="例如"></a>例如</h3><blockquote>
+<p>这是一个引用</p>
+</blockquote>
+<blockquote>
+<p>这是一个引用</p>
+</blockquote>
+<h2 id="6-Markdown-分割线"><a href="#6-Markdown-分割线" class="headerlink" title="(6) Markdown 分割线"></a>(6) Markdown 分割线</h2><p>可以在一行中用 <strong>三个 -</strong> 或者 ***** 来建立一个分割线，同时需要在分割线的上面空一行</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="string">这是一个分割线</span></span><br><span class="line"></span><br><span class="line"><span class="string">或者</span></span><br><span class="line"></span><br><span class="line"><span class="string">***</span></span><br><span class="line"><span class="string">*****</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="例如-4"><a href="#例如-4" class="headerlink" title="例如"></a>例如</h3><hr>
+<hr>
+<hr>
+<hr>
+<hr>
+<hr>
+<hr>
+<hr>
+<h2 id="7-Markdown-删除线"><a href="#7-Markdown-删除线" class="headerlink" title="(7) Markdown 删除线"></a>(7) Markdown 删除线</h2><p>删除线的使用，需要在删除的文字 <strong>前后</strong> 各使用 <strong>两个</strong> <strong>~</strong> </p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="string">~~这是要删除的内容~~</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="例如-5"><a href="#例如-5" class="headerlink" title="例如"></a>例如</h3><p><del>这段内容要被删除了</del></p>
+<h2 id="8-Markdown-下划线"><a href="#8-Markdown-下划线" class="headerlink" title="(8) Markdown 下划线"></a>(8) Markdown 下划线</h2><p>下划线的使用，在需要添加下划线的文字首部和尾部加上 <code>&lt;u&gt;文本&lt;/u&gt; </code>，如下</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="string">&lt;u&gt;这行文字已被添加下划线&lt;/u&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="例如-6"><a href="#例如-6" class="headerlink" title="例如"></a>例如</h3><p><u>这行文字已被添加下划线</u></p>
+<h2 id="9-Markdown-表格"><a href="#9-Markdown-表格" class="headerlink" title="(9) Markdown 表格"></a>(9) Markdown 表格</h2><p>表格使用 <code>|</code> 来分隔不同的单元格，使用 <code>-</code> 来分隔表头和其他行，如果想调整表格的左对齐、右对齐、居中对齐：</p>
+<ul>
+<li><code>:-</code>   将表头及单元格的内容 <strong>左对齐</strong></li>
+<li><code>:-:</code> 将表头及单元格的内容 <strong>居中对齐</strong></li>
+<li><code>-:</code>   将表头及单元格的内容 <strong>右对齐</strong></li>
+</ul>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="string">|第一列|第二列|第三列|</span></span><br><span class="line"><span class="string">|:-|:-:|-:|</span></span><br><span class="line"><span class="string">|你好|hello</span> <span class="string">world|学</span> <span class="string">Java</span> <span class="string">，狠狠赚一笔|</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="例如-7"><a href="#例如-7" class="headerlink" title="例如"></a>例如</h3><table>
+<thead>
+<tr>
+<th align="left">第一列</th>
+<th align="center">第二列</th>
+<th align="right">第三列</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">你好</td>
+<td align="center">hello world</td>
+<td align="right">学 Java ，狠狠赚一笔</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th>第一列</th>
+<th>第二列</th>
+<th>第三列</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>你好</td>
+<td>hello world</td>
+<td>学 Java ，狠狠赚一笔</td>
+</tr>
+</tbody></table>
+<h2 id="10-Markdown-图片"><a href="#10-Markdown-图片" class="headerlink" title="(10) Markdown 图片"></a>(10) Markdown 图片</h2><figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="type">![</span><span class="string">图片名称](图片地址)</span></span><br><span class="line"><span class="type">![Vue</span><span class="string">原型链](C:\Users\13627\Desktop\Vue原型链.png)</span></span><br><span class="line"></span><br><span class="line"><span class="type">![</span><span class="string">百度图标](https://www.baidu.com/favicon.ico)</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="例如-8"><a href="#例如-8" class="headerlink" title="例如"></a>例如</h3><p><img src="/posts/Markdown%E8%AF%AD%E6%B3%95/Vue%E5%8E%9F%E5%9E%8B%E9%93%BE.png" alt="Vue原型链"></p>
+<p><img src="https://www.baidu.com/favicon.ico" alt="百度图标"></p>
+<h2 id="11-Markdown-脚注"><a href="#11-Markdown-脚注" class="headerlink" title="(11) Markdown 脚注"></a>(11) Markdown 脚注</h2><p>脚注是对文本的备注说明，脚注与链接的区别，如下：</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="string">链接：[文字](链接)</span></span><br><span class="line"></span><br><span class="line"><span class="string">脚注：文字[^脚注名字]</span></span><br><span class="line">[<span class="string">^脚注名字</span>]<span class="string">:</span> <span class="string">这是一个脚注</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="例如-9"><a href="#例如-9" class="headerlink" title="例如"></a>例如</h3><p>链接：<a href="https://www.baidu.com/">百度</a></p>
+<p>脚注：百度<a href="666">^起源</a>     创业<a href="%E5%88%9B%E4%B8%9A%EF%BC%9A%E5%8D%B3%E8%B5%9A%E9%92%B1">^1</a></p>
+<h2 id="12-Markdown-代码块"><a href="#12-Markdown-代码块" class="headerlink" title="(12) Markdown 代码块"></a>(12) Markdown 代码块</h2><p>如果要引用代码块，用  <code> ``</code> 符号包裹起来即可，或者直接输入 <code>```</code> 后面加语言的名字，也可以不加</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	cout &lt;&lt; <span class="string">&quot;hello world&quot;</span> &lt;&lt; endl;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="Markdown-高级语法"><a href="#Markdown-高级语法" class="headerlink" title="Markdown 高级语法"></a>Markdown 高级语法</h1><h2 id="1-Markdown-数学公式"><a href="#1-Markdown-数学公式" class="headerlink" title="(1) Markdown 数学公式"></a>(1) Markdown 数学公式</h2><figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="string">$$</span></span><br><span class="line">	<span class="string">这里写公式语法</span></span><br><span class="line"><span class="string">$$</span></span><br></pre></td></tr></table></figure>
+
+
+<p>$$<br>H(D_2) &#x3D; -\left(\frac{2}{4}\log_2 \frac{2}{4} + \frac{2}{4}\log_2 \frac{2}{4}\right) &#x3D; 1<br>$$</p>
+<p>$$<br>\ce{Hg^2+ -&gt;[I-] HgI2 -&gt;[I-] [Hg^{II}I4]^2-}<br>$$</p>
+<p>$$<br>\begin{pmatrix}<br>  1 &amp; a_1 &amp; a_1^2 &amp; \cdots &amp; a_1^n \<br>  1 &amp; a_2 &amp; a_2^2 &amp; \cdots &amp; a_2^n \<br>  \vdots &amp; \vdots &amp; \vdots &amp; \ddots &amp; \vdots \<br>  1 &amp; a_m &amp; a_m^2 &amp; \cdots &amp; a_m^n \<br>  \end{pmatrix}<br>$$</p>
+<h2 id="2-Markdown-TOC-Table-of-Content"><a href="#2-Markdown-TOC-Table-of-Content" class="headerlink" title="(2) Markdown TOC(Table of Content)"></a>(2) Markdown TOC(Table of Content)</h2><p>列出全部标题，通俗点说，就是一个小目录</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line">[<span class="string">TOC</span>] <span class="string">或者</span> [<span class="string">toc</span>]</span><br></pre></td></tr></table></figure>
+
+
+
+<p>[TOC]</p>
+<h2 id="3-Markdown-HTML"><a href="#3-Markdown-HTML" class="headerlink" title="(3) Markdown HTML"></a>(3) Markdown HTML</h2><figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">span</span> <span class="attr">style</span>=<span class="string">&quot;display:block;text-align:right;color:orangered;&quot;</span>&gt;</span>橙色居右<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">span</span> <span class="attr">style</span>=<span class="string">&quot;display:block;text-align:center;color:orangered;&quot;</span>&gt;</span>橙色居中<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><span style="display:block;text-align:right;color:orangered;">橙色居右</span><br><span style="display:block;text-align:center;color:orangered;">橙色居中</span></p>
+<p><font face="黑体">我是黑体字</font><br><font face="微软雅黑">我是微软雅黑</font><br><font face="STCAIYUN">我是华文彩云</font><br><font color="#0099ff" size="7" face="黑体">color&#x3D;#0099ff size&#x3D;72 face&#x3D;”黑体”</font><br><font color="#00ffff" size="72">color&#x3D;#00ffff</font><br><font color="gray" size="72">color&#x3D;gray</font></p>
+<h2 id="4-Markdown-转义"><a href="#4-Markdown-转义" class="headerlink" title="(4) Markdown 转义"></a>(4) Markdown 转义</h2><p>在 <code>Markdown</code> 编辑器里面使用了很多特殊符号来表示特定的意义，该特殊符号将不再显示，这个时候就需要转义字符——反斜杠，如下：</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="string">\*\*转义特殊符号正常显示\*\*</span></span><br><span class="line"></span><br><span class="line"><span class="string">**无转义特殊符号无法正常显示**</span></span><br></pre></td></tr></table></figure>
+
+<p>**转义特殊符号正常显示**</p>
+<p><strong>无转义特殊符号无法正常显示</strong></p>
+<h2 id="5-Markdown-URL"><a href="#5-Markdown-URL" class="headerlink" title="(5) Markdown URL"></a>(5) Markdown URL</h2><h2 id="6-Markdown-流程图和时序图"><a href="#6-Markdown-流程图和时序图" class="headerlink" title="(6) Markdown 流程图和时序图"></a>(6) Markdown 流程图和时序图</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sequenceDiagram</span><br><span class="line">玩家一-&gt;&gt;玩家二: 你好</span><br><span class="line">Note right of 玩家二: 正在思考</span><br><span class="line">玩家二--&gt;&gt;玩家一: 666</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="7-Markdown-复选框"><a href="#7-Markdown-复选框" class="headerlink" title="(7) Markdown 复选框"></a>(7) Markdown 复选框</h2><p>使用 <code>- [ ]</code> 和 <code>- [x]</code> 语法可以创建复选框，实现 <code>todo-list</code> 等功能，如下：</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="string">默认没选：-</span> [ ] </span><br><span class="line"><span class="string">默认勾选：-</span> [<span class="string">x</span>] </span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p><input disabled type="checkbox"> 
+111</p>
+</li>
+<li><p><input checked disabled type="checkbox"> 
+222</p>
+</li>
+<li><p><input checked disabled type="checkbox"> 
+333</p>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>Markdown</category>
+      </categories>
+      <tags>
+        <tag>Markdown</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>test</title>
+    <url>/posts/test/</url>
+    <content><![CDATA[<p><strong>这里是测试博客</strong></p>
+<p><img src="/posts/test/Vue%E5%8E%9F%E5%9E%8B%E9%93%BE.png" alt="vue"></p>
+<blockquote>
+<p>这里终于可以上传图片了</p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>心之所向</category>
+      </categories>
+      <tags>
+        <tag>test</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>redis</title>
+    <url>/posts/redis/</url>
+    <content><![CDATA[<h1 id="Redis-10大数据类型"><a href="#Redis-10大数据类型" class="headerlink" title="Redis 10大数据类型"></a>Redis 10大数据类型</h1><p>10大数据类型包括：<strong>String</strong>(字符串)，<strong>Bitmap</strong>(位图)，<strong>Bitfield</strong>(位域)，<strong>Hash</strong>(哈希表)，<strong>List</strong>(集合)，<strong>Set</strong>(列表)，<strong>Sorted set</strong>(有序集合 ZSet)，<strong>Geospatial</strong>(地理空间)，<strong>Hyperlog</strong>(基数统计)，<strong>Stream</strong>(流)</p>
+<h1 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h1><ol>
+<li><code>keys *</code>：查看当前库所有的 <em>key</em> </li>
+<li><code>exists [key...]</code>：判断某个 <em>key</em> 是否存在，返回的数字为存在的 <em>key</em> 数量</li>
+<li><code>type key</code>：查看 <em>key</em> 是什么类型</li>
+<li><code>del [key...]</code>：删除指定的 <em>key</em> 数据，返回的数字为删除的 <em>key</em> 数量（原子性，若key很大，则在高并发情况下会产生阻塞队列）</li>
+<li><code>unlink [key...]</code>：非阻塞删除，会在异步中操作（非阻塞，异步操作，不会产生阻塞队列）</li>
+<li><code>ttl key</code>：查看还有多少秒过期，-1表示永不过期，-2表示已过期</li>
+<li><code>expire key</code>：为给定的 <em>key</em> 设置过期时间</li>
+<li><code>move key dbindex[0-15]</code>：将当前数据库的 <em>key</em> 移动到给定的数据库 <em>db</em> 当中，<em>dbindex</em> 直接输入数字即可</li>
+<li><code>select dbindex</code>：切换数据库[0-15]，默认为 0</li>
+<li><code>dbsize</code>：查看当前数据库 <em>key</em> 的数量</li>
+<li><code>flushdb</code>：清空当前库（很危险，尽量不要使用）</li>
+<li><code>flushall</code>：通杀全部库（更危险，最好不要使用）</li>
+</ol>
+<p>备注：</p>
+<blockquote>
+<p>命令不区分大小写，而 <em>key</em> 区分大小写</p>
+<p>永远的帮助命令，help @类型，如help @String，help @List，help @Hash</p>
+</blockquote>
+<h1 id="String类型"><a href="#String类型" class="headerlink" title="String类型"></a>String类型</h1><h2 id="1、set命令"><a href="#1、set命令" class="headerlink" title="1、set命令"></a>1、set命令</h2><ol>
+<li><code>set key value [nx|xx]</code>：*<code>nx</code><em>表示 <em>key</em> 不存在时 <em>set</em> ，</em><code>xx</code>*表示 <em>key</em> 存在时 <em>set</em>，若不符合情况，均返回 <em>null</em></li>
+<li><code>set key value [get]</code>：*<code>get</code>*表示会返回<strong>老值</strong>，同时设置<strong>新值</strong>，若 <em>key</em> 不存在则返回 <em>null</em></li>
+<li><code>set key value [ex seconds|px milliseconds] </code>：*<code>ex seconds</code>* 以秒为单位设置过期时间，*<code>px milliseconds</code>* 以毫秒为单位设置过期时间</li>
+<li><code>set key value [exat unix-time-seconds|pxat unix-time-milliseconds]</code>：*<code>exat unix-time-seconds</code>* 设置以秒为单位的<em>unix</em> 时间戳所对应的时间为过期时间，*<code>pxat unix-time-milliseconds</code>* 设置以毫秒为单位的 <em>unix</em> 时间戳所对应的时间为过期时间</li>
+<li><code>set key value [keepttl]</code>：*<code>keepttl</code>* 保留设置前指定键的生存时间，这样在修改了 <em>key</em> 值后也不会丢失原来的过期时间</li>
+</ol>
+<h2 id="2、mset、mget和msetnx命令"><a href="#2、mset、mget和msetnx命令" class="headerlink" title="2、mset、mget和msetnx命令"></a>2、mset、mget和msetnx命令</h2><ol>
+<li><code>mset key value [key value ...]</code>：同时设置多个键值</li>
+<li><code>mget key [key ...]</code>：同时获取多个键值</li>
+<li><code>msetnx key value [key value ...]</code>：只有不存在键，才能设置值，并且是同时设置，即使只有一个不存在，也不能设置值</li>
+</ol>
+<h2 id="3、getrange和setrange命令"><a href="#3、getrange和setrange命令" class="headerlink" title="3、getrange和setrange命令"></a>3、getrange和setrange命令</h2><ol>
+<li><code>getrange key start end</code>：相当于 <em>Java</em> 中的 <code>subString</code> ，可以截取范围内的字符串</li>
+<li><code>setrange key offset value</code>：从 <em>offset</em> 开始，用 <em>value</em> 覆盖原来的值，<em>value</em> 有多少位，就覆盖多少位</li>
+</ol>
+<h2 id="4、incr、incrby、decr和decrby命令"><a href="#4、incr、incrby、decr和decrby命令" class="headerlink" title="4、incr、incrby、decr和decrby命令"></a>4、incr、incrby、decr和decrby命令</h2><ol>
+<li><code>incr key</code>：递增数字</li>
+<li><code>incrby key increment</code>：增加指定的整数</li>
+<li><code>decr key</code>：递减数字</li>
+<li><code>decrby key decrement</code>：减少指定的整数</li>
+</ol>
+<h2 id="5、strlen和append命令"><a href="#5、strlen和append命令" class="headerlink" title="5、strlen和append命令"></a>5、strlen和append命令</h2><ol>
+<li><code>strlen key</code>：获取字符串长度</li>
+<li><code>append key value</code>：往键值追加指定内容 <em>value</em></li>
+</ol>
+<h2 id="6、setex和setnx命令-分布式锁"><a href="#6、setex和setnx命令-分布式锁" class="headerlink" title="6、setex和setnx命令(分布式锁)"></a>6、setex和setnx命令(分布式锁)</h2><ol>
+<li><code>setex key seconds value</code>：给 <em>key</em> 设置过期时间和值</li>
+<li><code>setnx key value</code>：只有当 <em>key</em> 不存在时，才会设置值</li>
+</ol>
+<h2 id="7、getset命令"><a href="#7、getset命令" class="headerlink" title="7、getset命令"></a>7、getset命令</h2><ol>
+<li><code>getset key value</code>：先 <em>get</em> ，再 <em>set</em> ，和 <code>set key value get</code> 一致</li>
+</ol>
+<h1 id="List类型"><a href="#List类型" class="headerlink" title="List类型"></a>List类型</h1><h2 id="1、lpush、rpush和lrange命令"><a href="#1、lpush、rpush和lrange命令" class="headerlink" title="1、lpush、rpush和lrange命令"></a>1、lpush、rpush和lrange命令</h2><ol>
+<li><code>lpush key element [element ...]</code>：给 <em>key</em> 设置一系列值，并且是从左插入，和链表类似</li>
+<li><code>rpush key element [element ...]</code>：给 <em>key</em> 设置一系列值，并且是从右插入，和链表类似</li>
+<li><code>lrange key start stop</code>：<em>list</em> 类型独有的遍历方式，<em>start</em> 和 <em>stop</em> 取下标，<em>stop</em> 为 -1 时表示遍历<strong>全部</strong></li>
+</ol>
+<h2 id="2、lpop和rpop命令"><a href="#2、lpop和rpop命令" class="headerlink" title="2、lpop和rpop命令"></a>2、lpop和rpop命令</h2><ol>
+<li><code>lpop key [count]</code>：从左开始弹出 <em>key</em> 对应 <em>count</em> 个值，返回的是弹出的值</li>
+<li><code>rpop key [count]</code>：从右开始弹出 <em>key</em> 对应 <em>count</em> 个值，返回的是弹出的值</li>
+</ol>
+<h2 id="3、lindex和llen命令"><a href="#3、lindex和llen命令" class="headerlink" title="3、lindex和llen命令"></a>3、lindex和llen命令</h2><ol>
+<li><code>lindex key index</code>：获取 <em>index</em> 对应的值</li>
+<li><code>llen key</code>：获取列表中元素的个数</li>
+</ol>
+<h2 id="4、lrem和ltrim命令"><a href="#4、lrem和ltrim命令" class="headerlink" title="4、lrem和ltrim命令"></a>4、lrem和ltrim命令</h2><ol>
+<li><code>lrem key count element</code>：删除 <em>count</em> 个值等于 <em>element</em> 的元素</li>
+<li><code>ltrim key start stop</code>：截取指定范围内的值后再赋值给 <em>key</em></li>
+</ol>
+<h2 id="5、rpoplpush命令"><a href="#5、rpoplpush命令" class="headerlink" title="5、rpoplpush命令"></a>5、rpoplpush命令</h2><ol>
+<li><code>rpoplpush source destination</code>：对 <em>surce</em> 执行 <code>rpop</code> 操作后，把 <strong>弹出的元素</strong> 再 <code>lpush</code> 到 <em>destination</em></li>
+</ol>
+<h2 id="6、lset和linsert命令"><a href="#6、lset和linsert命令" class="headerlink" title="6、lset和linsert命令"></a>6、lset和linsert命令</h2><ol>
+<li><code>lset key index element</code>：设置对应 <em>index</em> 位置的元素值为 <em>element</em></li>
+<li><code>linsert key before|after pivot element</code>：在对应 <em>pivot</em> 值的位置前|后，插入 <em>element</em> 值</li>
+</ol>
+<h1 id="Hash类型"><a href="#Hash类型" class="headerlink" title="Hash类型"></a>Hash类型</h1><h2 id="1、hset、hget、hmset、hmget、hgetall和hdel命令"><a href="#1、hset、hget、hmset、hmget、hgetall和hdel命令" class="headerlink" title="1、hset、hget、hmset、hmget、hgetall和hdel命令"></a>1、hset、hget、hmset、hmget、hgetall和hdel命令</h2><ol>
+<li><code>hset key field value [field value ...]</code>：设置 <em>key</em> 对应的键值对，可以设置多个</li>
+<li><code>hget key field</code>：获取 <em>key</em> 对应的键的值</li>
+<li><code>hmset key field value [field value ...]</code>：和 <code>hset</code> 用法差不多</li>
+<li><code>hmget key field [field ...]</code>：可以获取 <em>key</em> 多个键的值</li>
+<li><code>hgetall key</code>：可以获取 <em>key</em> 对应的多个键值对</li>
+<li><code>hdel key field [field ...]</code>：删除 <em>key</em> 多个键</li>
+</ol>
+<h2 id="2、hlen命令"><a href="#2、hlen命令" class="headerlink" title="2、hlen命令"></a>2、hlen命令</h2><ol>
+<li><code>hlen key</code>：获取 <em>key</em> 全部键的个数</li>
+</ol>
+<h2 id="3、hexists-命令"><a href="#3、hexists-命令" class="headerlink" title="3、hexists 命令"></a>3、hexists 命令</h2><ol>
+<li><code>hexists key field</code>：判断 <em>key</em> 对应的键是否存在，若存在则返回 1，不存在返回 0</li>
+</ol>
+<h2 id="4、hkeys和hvals命令"><a href="#4、hkeys和hvals命令" class="headerlink" title="4、hkeys和hvals命令"></a>4、hkeys和hvals命令</h2><ol>
+<li><code>hkeys key</code>：获取 <em>key</em> 所有的键</li>
+<li><code>hvals key</code>：获取 <em>key</em> 多有的值</li>
+</ol>
+<h2 id="5、hincrby和hincrbyfloat命令"><a href="#5、hincrby和hincrbyfloat命令" class="headerlink" title="5、hincrby和hincrbyfloat命令"></a>5、hincrby和hincrbyfloat命令</h2><ol>
+<li><code>hincrby key field increment</code>：给 <em>key</em> 对应的键值加上 <em>increment</em> ，但是键对应的值只能为数字，否则会报错</li>
+<li><code>hincrbyfloat key field increment</code>：给 <em>key</em> 对应的键值加上 <em>increment</em> ，<em>increment</em> 可以为浮点数</li>
+</ol>
+<h2 id="6、hsetnx命令"><a href="#6、hsetnx命令" class="headerlink" title="6、hsetnx命令"></a>6、hsetnx命令</h2><ol>
+<li><code>hsetnx key field value</code>：给 <em>key</em> 设置键值，但是这个键必须不存在，否则会报错</li>
+</ol>
+<h1 id="Set类型"><a href="#Set类型" class="headerlink" title="Set类型"></a>Set类型</h1><h2 id="基本命令"><a href="#基本命令" class="headerlink" title="基本命令"></a>基本命令</h2><h3 id="1、sadd命令"><a href="#1、sadd命令" class="headerlink" title="1、sadd命令"></a>1、sadd命令</h3><ol>
+<li><code>sadd key member [member ...]</code>：往 <em>key</em> 里面添加成员，可以添加多个，但不能重复</li>
+</ol>
+<h3 id="2、smembers命令"><a href="#2、smembers命令" class="headerlink" title="2、smembers命令"></a>2、smembers命令</h3><ol>
+<li><code>smembers key</code>：获取 <em>key</em> 全部的成员</li>
+</ol>
+<h3 id="3、sismember命令"><a href="#3、sismember命令" class="headerlink" title="3、sismember命令"></a>3、sismember命令</h3><ol>
+<li><code>sismember key member</code>：查看 <em>key</em> 是否有成员 <em>member</em> ，若没有则返回 0，有则返回 1</li>
+</ol>
+<h3 id="4、srem命令"><a href="#4、srem命令" class="headerlink" title="4、srem命令"></a>4、srem命令</h3><ol>
+<li><code>srem key member [member ...]</code>：删除 <em>key</em> 里面的成员，可以删除多个</li>
+</ol>
+<h3 id="5、scard命令"><a href="#5、scard命令" class="headerlink" title="5、scard命令"></a>5、scard命令</h3><ol>
+<li><code>scard key</code>：获取 <em>key</em> 里面的成员个数</li>
+</ol>
+<h3 id="6、srandmember命令"><a href="#6、srandmember命令" class="headerlink" title="6、srandmember命令"></a>6、srandmember命令</h3><ol>
+<li><code>srandmember key [count]</code>：随机获取 <em>key</em> 里面的 <em>count</em> 个成员，成员不删除</li>
+</ol>
+<h3 id="7、spop命令"><a href="#7、spop命令" class="headerlink" title="7、spop命令"></a>7、spop命令</h3><ol>
+<li><code>spop key [count]</code>：随机弹出 <em>key</em> 里面 <em>count</em> 个值，成员会删除</li>
+</ol>
+<h3 id="8、smove命令"><a href="#8、smove命令" class="headerlink" title="8、smove命令"></a>8、smove命令</h3><ol>
+<li><code>smove source destination member</code>：从 <code>source</code> 中移动成员到 <code>destination</code> 中</li>
+</ol>
+<h2 id="集合运算"><a href="#集合运算" class="headerlink" title="集合运算"></a>集合运算</h2><h3 id="1、差集运算-sdiff"><a href="#1、差集运算-sdiff" class="headerlink" title="1、差集运算(sdiff)"></a>1、差集运算(sdiff)</h3><ol>
+<li><code>sdiff key [key ...]</code>：获取两个 <em>key</em> 之间的差集，如 A-B，获取 A 中有的，B 中没有的</li>
+</ol>
+<h3 id="2、并集运算-sunion"><a href="#2、并集运算-sunion" class="headerlink" title="2、并集运算(sunion)"></a>2、并集运算(sunion)</h3><ol>
+<li><code>sunion key [key ...]</code>：获取两个 <em>key</em> 之间的并集</li>
+</ol>
+<h3 id="3、交集运算-sinter和sintercard"><a href="#3、交集运算-sinter和sintercard" class="headerlink" title="3、交集运算(sinter和sintercard)"></a>3、交集运算(sinter和sintercard)</h3><ol>
+<li><code>sinter key [key ...]</code>：获取两个 <em>key</em> 之间的交集</li>
+<li><code>sintercard numkeys key [key ...] [LIMIT limit]</code>：获取 <em>numkeys</em> 个 <em>key</em> 的交集元素个数，后面的 <em>limit</em> 表示显示几个</li>
+</ol>
+<h1 id="ZSet类型"><a href="#ZSet类型" class="headerlink" title="ZSet类型"></a>ZSet类型</h1><h2 id="1、zadd命令"><a href="#1、zadd命令" class="headerlink" title="1、zadd命令"></a>1、zadd命令</h2><ol>
+<li><code>zadd key [NX|XX] [GT|LT] [CH] [INCR] score member [score member ...]</code>：往 <em>key</em> 里面添加成员和分数</li>
+</ol>
+<h2 id="2、zrange命令"><a href="#2、zrange命令" class="headerlink" title="2、zrange命令"></a>2、zrange命令</h2><ol>
+<li><code>zrange key start stop [byscore|bylex] [rev] [LIMIT offset count] [WITHSCORES]</code>：遍历 <em>key</em> ，<em>withscores</em> 表示可以带着分数</li>
+</ol>
+<h2 id="3、zrevrange命令"><a href="#3、zrevrange命令" class="headerlink" title="3、zrevrange命令"></a>3、zrevrange命令</h2><ol>
+<li><code>zrevrange key start stop [WITHSCORES]</code>：反向遍历 <em>key</em> ，其他的和 <code>zrange</code> 一样</li>
+</ol>
+<h2 id="4、zrangebyscore命令"><a href="#4、zrangebyscore命令" class="headerlink" title="4、zrangebyscore命令"></a>4、zrangebyscore命令</h2><ol>
+<li><code>zrangebyscore key min max [WITHSCORES] [LIMIT offset count]</code>：遍历 <em>key</em> ，从规定的最小值到最大值，即 <code>&gt;=,&lt;=</code> ，可以用 <em>offset</em> 指定返回的数量，如果 <em>min</em> 和 <em>max</em> 的左边带有<code>(</code>，如 <code>(min</code> 或者 <code>(max</code> ，表示 <code>&gt;</code> 或者 <code>&lt;</code></li>
+</ol>
+<h2 id="5、zscore命令"><a href="#5、zscore命令" class="headerlink" title="5、zscore命令"></a>5、zscore命令</h2><ol>
+<li><code>zscore key member</code>：获取 <em>key</em> 对应成员的分数</li>
+</ol>
+<h2 id="6、zcard命令"><a href="#6、zcard命令" class="headerlink" title="6、zcard命令"></a>6、zcard命令</h2><ol>
+<li><code>zcard key</code>：获取 <em>key</em> 的成员个数</li>
+</ol>
+<h2 id="7、zrem命令"><a href="#7、zrem命令" class="headerlink" title="7、zrem命令"></a>7、zrem命令</h2><ol>
+<li><code>zrem key member [member ...]</code>：删除 <em>key</em> 的成员，可以删除多个</li>
+</ol>
+<h2 id="8、zincrby命令"><a href="#8、zincrby命令" class="headerlink" title="8、zincrby命令"></a>8、zincrby命令</h2><ol>
+<li><code>zincrby key increment member</code>：给 <em>key</em> 对应的成员分数增加 <em>increment</em></li>
+</ol>
+<h2 id="9、zcount命令"><a href="#9、zcount命令" class="headerlink" title="9、zcount命令"></a>9、zcount命令</h2><ol>
+<li><code>zcount key min max</code>：获得 <em>key</em> 在 <em>min</em> 到 <em>max</em> 范围内的成员个数</li>
+</ol>
+<h2 id="10、zmpop命令"><a href="#10、zmpop命令" class="headerlink" title="10、zmpop命令"></a>10、zmpop命令</h2><ol>
+<li><code>zmpop numkeys key [key ...] MIN|MAX [COUNT count]</code>：从 <em>numkeys</em> 个 <em>key</em> 中弹出最小(MIN)或最大(MAX)分数的成员，弹出 <em>count</em> 个</li>
+</ol>
+<h2 id="11、zrank命令"><a href="#11、zrank命令" class="headerlink" title="11、zrank命令"></a>11、zrank命令</h2><ol>
+<li><code>zrank key member [WITHSCORES]</code>：正序获取 <em>key</em> 对应成员的下标值</li>
+</ol>
+<h2 id="12、zrevrank命令"><a href="#12、zrevrank命令" class="headerlink" title="12、zrevrank命令"></a>12、zrevrank命令</h2><ol>
+<li><code>zrevrank key member [WITHSCORES]</code>：逆序获取 <em>key</em> 对应成员的下标值</li>
+</ol>
+<h1 id="Bitmap类型"><a href="#Bitmap类型" class="headerlink" title="Bitmap类型"></a>Bitmap类型</h1><p><em><strong>*************************************底层是 String*********************************</strong></em></p>
+<h2 id="1、setbit命令"><a href="#1、setbit命令" class="headerlink" title="1、setbit命令"></a>1、setbit命令</h2><ol>
+<li><code>setbit key offset value</code>：设置 <em>key</em> 的偏移量的值为多少，<em>offset</em> 从 0 开始，<strong><em>value</em> 只能为 0 或 1</strong></li>
+</ol>
+<h2 id="2、getbit命令"><a href="#2、getbit命令" class="headerlink" title="2、getbit命令"></a>2、getbit命令</h2><ol>
+<li><code>getbit key offset</code>：获得 <em>key</em> 偏移量 <em>offset</em> 的值</li>
+</ol>
+<h2 id="3、strlen命令"><a href="#3、strlen命令" class="headerlink" title="3、strlen命令"></a>3、strlen命令</h2><ol>
+<li><code>strlen key</code>：获得 <em>key</em> 占据几个字节，不是获得字符串的长度，超过 8 位后自己按照 8 位一组一byte再扩容</li>
+</ol>
+<h2 id="4、bitcount命令"><a href="#4、bitcount命令" class="headerlink" title="4、bitcount命令"></a>4、bitcount命令</h2><ol>
+<li><code>bitcount key [start end [BYTE|BIT]]</code>：获取  <em>key</em> 里面从 <em>start</em> 位到 <em>end</em> 位含有 1 的位数，默认是 <em>BYTE</em> 单位，最好是用 <em>BIT</em> 作为单位</li>
+</ol>
+<h2 id="5、bitop命令"><a href="#5、bitop命令" class="headerlink" title="5、bitop命令"></a>5、bitop命令</h2><ol>
+<li><code>BITOP AND|OR|XOR|NOT destkey key [key ...]</code>：让多个 <em>key</em> 可以进行 <em><strong>位运算</strong></em> (与  或  异或  非)，结果给 <em>destkey</em></li>
+</ol>
+<h1 id="HyperLogLog类型"><a href="#HyperLogLog类型" class="headerlink" title="HyperLogLog类型"></a>HyperLogLog类型</h1><p><em><strong>*************************************基数统计，底层是String*********************************</strong></em></p>
+<h2 id="1、pfadd命令"><a href="#1、pfadd命令" class="headerlink" title="1、pfadd命令"></a>1、pfadd命令</h2><ol>
+<li><code>pfadd key [element [element ...]]</code>：往 <em>key</em> 里面插入 <em>element</em> 元素</li>
+</ol>
+<h2 id="2、pfcount命令"><a href="#2、pfcount命令" class="headerlink" title="2、pfcount命令"></a>2、pfcount命令</h2><ol>
+<li><code>pfcount key [key ...]</code>：去掉重复的元素后，统计剩下的元素个数，多个 <em>key</em> ，会统计总的去掉重复元素之后的个数</li>
+</ol>
+<h2 id="3、pfmerge命令"><a href="#3、pfmerge命令" class="headerlink" title="3、pfmerge命令"></a>3、pfmerge命令</h2><ol>
+<li><code>pfmerge destkey [sourcekey [sourcekey ...]]</code>：合并多个 <em>sourcekey</em> 到 <em>destkey</em> 中，并去掉重复元素</li>
+</ol>
+<h1 id="GEO类型"><a href="#GEO类型" class="headerlink" title="GEO类型"></a>GEO类型</h1><p><em><strong>*************************************底层是ZSet*********************************</strong></em></p>
+<p><em><strong>**************************中文乱码，在redis-cli后面加上–raw*************************</strong></em></p>
+<h2 id="1、geoadd命令"><a href="#1、geoadd命令" class="headerlink" title="1、geoadd命令"></a>1、geoadd命令</h2><ol>
+<li><code>geoadd key [NX|XX] [CH] longitude latitude member [longitude latitude member ...]</code>：<em>longitude</em> 经度，<em>latitude</em> 纬度，<em>member</em> 位置名称</li>
+</ol>
+<h2 id="2、geopos命令"><a href="#2、geopos命令" class="headerlink" title="2、geopos命令"></a>2、geopos命令</h2><ol>
+<li><code>geopos key [member [member ...]]</code>：返回经纬度</li>
+</ol>
+<h2 id="3、geohash命令"><a href="#3、geohash命令" class="headerlink" title="3、geohash命令"></a>3、geohash命令</h2><ol>
+<li><code>geohash key [member [member ...]]</code>：返回经纬度坐标的geohash表示</li>
+</ol>
+<h2 id="4、geodist命令"><a href="#4、geodist命令" class="headerlink" title="4、geodist命令"></a>4、geodist命令</h2><ol>
+<li><code>geodist key member1 member2 [M|KM|FT|MI]</code>：两个位置之间的距离，后面跟单位 <em>KM</em> 千米，<em>M</em> 米，<em>FT</em> 英尺，<em>MI</em> 英里</li>
+</ol>
+<h2 id="5、georadius命令"><a href="#5、georadius命令" class="headerlink" title="5、georadius命令"></a>5、georadius命令</h2><ol>
+<li><code>georadius key longitude latitude radius M|KM|FT|MI [WITHCOORD] [WITHDIST] [WITHHASH] [COUNT count [ANY]] [ASC|DESC] [STORE key|STOREDIST key]</code>：以给定的经纬度为中心，返回键包含的位置元素当中，与中心的距离不超过给定最大距离(<em><strong>radius</strong></em>)的所有位置元素，<em><strong>withdist</strong></em>：返回位置元素的同时，将位置元素与中心之间的距离也一并返回，<em><strong>withcoord</strong></em>：将位置元素的经度与纬度一并返回，<em><strong>withhash</strong></em>：以52位有符号整数的形式，返回位置元素经过原始<em><strong>geohash</strong></em>编码的有序集合分值，<em><strong>count</strong></em>：限定返回的记录数</li>
+</ol>
+<h2 id="6、georadiusbymember命令"><a href="#6、georadiusbymember命令" class="headerlink" title="6、georadiusbymember命令"></a>6、georadiusbymember命令</h2><ol>
+<li><code>georadiusbymember key member radius M|KM|FT|MI [WITHCOORD] [WITHDIST] [WITHHASH] [COUNT count [ANY]] [ASC|DESC] [STORE key|STOREDIST key]</code>：根据位置名称查找，和 <em><strong>georadius</strong></em> 的用法差不多</li>
+</ol>
+<h1 id="Stream类型"><a href="#Stream类型" class="headerlink" title="Stream类型"></a>Stream类型</h1><h2 id="队列相关指令"><a href="#队列相关指令" class="headerlink" title="队列相关指令"></a>队列相关指令</h2><h3 id="1、xadd命令"><a href="#1、xadd命令" class="headerlink" title="1、xadd命令"></a>1、xadd命令</h3><ol>
+<li><code>xadd key [NOMKSTREAM] [MAXLEN|MINID [=|~] threshold [LIMIT count]] *|id field value [field value ...]</code>：添加消息到队列末尾，* 表示自动生成 <em><strong>MessageID</strong></em>，若不加 <em>，则要自己手动加 <em><strong>ID</strong></em>，后面顺序跟着一堆业务 <em><strong>field</strong></em>，</em><strong>value</strong>*</li>
+</ol>
+<h3 id="2、xtrim命令"><a href="#2、xtrim命令" class="headerlink" title="2、xtrim命令"></a>2、xtrim命令</h3><ol>
+<li><code>xtrim key MAXLEN|MINID [=|~] threshold [LIMIT count]</code>：对 <em><strong>Stream</strong></em> 的长度进行截取，<em><strong>maxlen</strong></em> 允许的最大长度，<em><strong>minid</strong></em> 允许的最小 <em><strong>id</strong></em></li>
+</ol>
+<h3 id="3、xdel命令"><a href="#3、xdel命令" class="headerlink" title="3、xdel命令"></a>3、xdel命令</h3><ol>
+<li><code>xdel key id [id ...]</code>：删除 <em><strong>key</strong></em> 对应的 <em><strong>id</strong></em></li>
+</ol>
+<h3 id="4、xlen命令"><a href="#4、xlen命令" class="headerlink" title="4、xlen命令"></a>4、xlen命令</h3><ol>
+<li><code>xlen key</code>：获取 <em><strong>key</strong></em> 里面成员的数量</li>
+</ol>
+<h3 id="5、xrange命令"><a href="#5、xrange命令" class="headerlink" title="5、xrange命令"></a>5、xrange命令</h3><ol>
+<li><code>xrange key start end [COUNT count]</code>：<em><strong>start</strong></em> 表示开始值，<code>-</code>代表最小值，<em><strong>end</strong></em> 表示结束值，<code>+</code> 代表最大值，<em><strong>count</strong></em> 代表最多可以获取多少个值</li>
+</ol>
+<h3 id="6、xrevrange命令"><a href="#6、xrevrange命令" class="headerlink" title="6、xrevrange命令"></a>6、xrevrange命令</h3><ol>
+<li><code>xrevrange key end start [COUNT count]</code>：<em><strong>end</strong></em> 取 <code>+</code>，<em><strong>start</strong></em> 取 <code>-</code></li>
+</ol>
+<h3 id="7、xread命令"><a href="#7、xread命令" class="headerlink" title="7、xread命令"></a>7、xread命令</h3><ol>
+<li><code>xread [COUNT count] [BLOCK milliseconds] STREAMS key [key ...] id [id ...]</code>：<em><strong>count</strong></em> 最多读取多少条消息，<em><strong>block</strong></em> 是否已阻塞的方式读取消息，默认不阻塞，如果 <code>milliseconds</code> 设置为 0，表示永远阻塞，***$*** 表示从尾，<em><strong>0</strong></em> 表示从头</li>
+</ol>
+<h2 id="消费组相关指令"><a href="#消费组相关指令" class="headerlink" title="消费组相关指令"></a>消费组相关指令</h2><h3 id="1、xgroup-create指令"><a href="#1、xgroup-create指令" class="headerlink" title="1、xgroup create指令"></a>1、xgroup create指令</h3><ol>
+<li><code>xgroup create key group id|$ [MKSTREAM] [ENTRIESREAD entries-read]</code>：用于创建消费者组</li>
+</ol>
+<h3 id="2、xreadgroup命令"><a href="#2、xreadgroup命令" class="headerlink" title="2、xreadgroup命令"></a>2、xreadgroup命令</h3><ol>
+<li><code>GROUP group consumer [COUNT count] [BLOCK milliseconds] [NOACK] STREAMS key [key ...] id [id ...]</code>：<code>&gt;</code> 表示从第一条尚未被消费的消息开始读取，消费组 <em>group</em> 内的消费者 <em>consumer</em> 从 <em>key</em> 消息队列中读取所有消息</li>
+</ol>
+<h3 id="3、xpending命令"><a href="#3、xpending命令" class="headerlink" title="3、xpending命令"></a>3、xpending命令</h3><ol>
+<li><code>xpending key group [[IDLE min-idle-time] start end count [consumer]]</code>：查询每个消费组内所有消费者(已读取，但尚未确认)的消息，查看某个消费者具体读了哪些数据</li>
+</ol>
+<h3 id="4、xack命令"><a href="#4、xack命令" class="headerlink" title="4、xack命令"></a>4、xack命令</h3><ol>
+<li><code>xack key group id [id ...]</code>：向消息队列确认消息处理已完成</li>
+</ol>
+<h3 id="5、xinfo-stream命令"><a href="#5、xinfo-stream命令" class="headerlink" title="5、xinfo stream命令"></a>5、xinfo stream命令</h3><ol>
+<li><code>xinfo stream key [FULL [COUNT count]]</code>：用于打印 Stream\Consumer\Group的详细信息</li>
+</ol>
+<h1 id="redis客户端"><a href="#redis客户端" class="headerlink" title="redis客户端"></a>redis客户端</h1><h2 id="1、Jedis"><a href="#1、Jedis" class="headerlink" title="1、Jedis"></a>1、Jedis</h2><h3 id="使用方法"><a href="#使用方法" class="headerlink" title="使用方法"></a>使用方法</h3><ol>
+<li><p>在springboot中引入依赖</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="comment">&lt;!--   使用 jedis 作为 redis客户端    --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>redis.clients<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>jedis<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>3.7.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>测试jedis</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@SpringBootTest</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">RedisTestApplicationTests</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Jedis jedis;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@BeforeEach</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setUp</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="comment">// 建立连接</span></span><br><span class="line">        jedis = <span class="keyword">new</span> <span class="title class_">Jedis</span>(<span class="string">&quot;192.168.65.128&quot;</span>, <span class="number">6379</span>);</span><br><span class="line">        <span class="comment">// 设置密码</span></span><br><span class="line">        jedis.auth(<span class="string">&quot;111111&quot;</span>);</span><br><span class="line">        <span class="comment">// 选择库</span></span><br><span class="line">        jedis.select(<span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">testJedis</span><span class="params">()</span> &#123;</span><br><span class="line">        Set&lt;String&gt; keys = jedis.keys(<span class="string">&quot;*&quot;</span>);</span><br><span class="line">        keys.forEach(System.out::println);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@AfterEach</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setDown</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="comment">// 关闭连接</span></span><br><span class="line">        <span class="keyword">if</span> (jedis != <span class="literal">null</span>) &#123;</span><br><span class="line">            jedis.close();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="jedis连接池"><a href="#jedis连接池" class="headerlink" title="jedis连接池"></a>jedis连接池</h3><p>Jedis本身是线程不安全的，并且频繁的创建和销毁连接会有性能损耗，因此推荐使用Jedis连接池代替Jedis直连方式</p>
+<h3 id="连接池配置"><a href="#连接池配置" class="headerlink" title="连接池配置"></a>连接池配置</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">JedisConnectFactory</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> JedisPool jedisPool;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        <span class="comment">// 配置连接池</span></span><br><span class="line">        <span class="type">JedisPoolConfig</span> <span class="variable">jedisPoolConfig</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">JedisPoolConfig</span>();</span><br><span class="line">        <span class="comment">// 最大连接数</span></span><br><span class="line">        jedisPoolConfig.setMaxTotal(<span class="number">8</span>);</span><br><span class="line">        <span class="comment">// 最大空闲连接数</span></span><br><span class="line">        jedisPoolConfig.setMaxIdle(<span class="number">8</span>);</span><br><span class="line">        <span class="comment">// 最小空闲连接数</span></span><br><span class="line">        jedisPoolConfig.setMinIdle(<span class="number">0</span>);</span><br><span class="line">        <span class="comment">// 等待时长</span></span><br><span class="line">        jedisPoolConfig.setMaxWait(Duration.ofMillis(<span class="number">1000</span>));</span><br><span class="line">        <span class="comment">// 配置连接池对象</span></span><br><span class="line">        jedisPool = <span class="keyword">new</span> <span class="title class_">JedisPool</span>(jedisPoolConfig,</span><br><span class="line">                <span class="string">&quot;192.168.65.128&quot;</span>, <span class="number">6379</span>, <span class="number">1000</span>, <span class="string">&quot;111111&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> Jedis <span class="title function_">getJedis</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> jedisPool.getResource();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在测试方法处，直接调用即可</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@BeforeEach</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setUp</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="comment">// 建立连接</span></span><br><span class="line">    <span class="comment">// jedis = new Jedis(&quot;192.168.65.128&quot;, 6379);</span></span><br><span class="line">    <span class="comment">// 连接处创建 Jedis</span></span><br><span class="line">    jedis = JedisConnectFactory.getJedis();</span><br><span class="line">    <span class="comment">// 设置密码</span></span><br><span class="line">    jedis.auth(<span class="string">&quot;111111&quot;</span>);</span><br><span class="line">    <span class="comment">// 选择库</span></span><br><span class="line">    jedis.select(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="2、SpringDataRedis"><a href="#2、SpringDataRedis" class="headerlink" title="2、SpringDataRedis"></a>2、SpringDataRedis</h2><h3 id="使用方法-1"><a href="#使用方法-1" class="headerlink" title="使用方法"></a>使用方法</h3><ol>
+<li><p>引入依赖</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 引入 redis --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-data-redis<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!--   连接池依赖(commons-pool)    --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.commons<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>commons-pool2<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>写入配置</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">redis:</span></span><br><span class="line">    <span class="attr">host:</span> <span class="number">192.168</span><span class="number">.65</span><span class="number">.128</span></span><br><span class="line">    <span class="attr">port:</span> <span class="number">6379</span></span><br><span class="line">    <span class="attr">password:</span> <span class="number">111111</span></span><br><span class="line">    <span class="attr">lettuce:</span></span><br><span class="line">      <span class="attr">pool:</span></span><br><span class="line">        <span class="attr">max-active:</span> <span class="number">8</span></span><br><span class="line">        <span class="attr">max-idle:</span> <span class="number">8</span></span><br><span class="line">        <span class="attr">min-idle:</span> <span class="number">0</span></span><br><span class="line">        <span class="attr">max-wait:</span> <span class="string">100ms</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>测试方法</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@SpringBootTest</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">SpringDataRedisTests</span> &#123;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> RedisTemplate&lt;String, Object&gt; redisTemplate;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">testString</span><span class="params">()</span> &#123;</span><br><span class="line">        redisTemplate.opsForValue().set(<span class="string">&quot;name&quot;</span>, <span class="string">&quot;zhangsan&quot;</span>);</span><br><span class="line">        <span class="type">Object</span> <span class="variable">name</span> <span class="operator">=</span> redisTemplate.opsForValue().get(<span class="string">&quot;name&quot;</span>);</span><br><span class="line">        System.out.println(name);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="配置redis"><a href="#配置redis" class="headerlink" title="配置redis"></a>配置redis</h3><p>对redis配置之后，存入对象就不会以字节的形式表示出来了，实现了序列化和反序列化的重新配置</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">RedisConfig</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Resource</span></span><br><span class="line">    <span class="keyword">private</span> RedisConnectionFactory redisConnectionFactory;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="keyword">public</span> RedisTemplate&lt;String, Object&gt; <span class="title function_">redisTemplate</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="comment">// 创建 redisTemplate 对象</span></span><br><span class="line">        RedisTemplate&lt;String, Object&gt; redisTemplate = <span class="keyword">new</span> <span class="title class_">RedisTemplate</span>&lt;&gt;();</span><br><span class="line">        <span class="comment">// 设置连接工厂</span></span><br><span class="line">        redisTemplate.setConnectionFactory(redisConnectionFactory);</span><br><span class="line">        <span class="comment">// 创建 JSON 序列化工具</span></span><br><span class="line">        <span class="type">GenericJackson2JsonRedisSerializer</span> <span class="variable">jsonRedisSerializer</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">GenericJackson2JsonRedisSerializer</span>();</span><br><span class="line">        <span class="comment">// 设置 key 的序列化</span></span><br><span class="line">        redisTemplate.setKeySerializer(RedisSerializer.string());</span><br><span class="line">        redisTemplate.setHashKeySerializer(RedisSerializer.string());</span><br><span class="line">        <span class="comment">// 设置 value 的序列化</span></span><br><span class="line">        redisTemplate.setValueSerializer(jsonRedisSerializer);</span><br><span class="line">        redisTemplate.setHashValueSerializer(jsonRedisSerializer);</span><br><span class="line">        <span class="comment">// 返回</span></span><br><span class="line">        <span class="keyword">return</span> redisTemplate;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="使用-StringRedisTemplate"><a href="#使用-StringRedisTemplate" class="headerlink" title="使用 StringRedisTemplate"></a>使用 StringRedisTemplate</h3><p>StringRedisTemplate只能使用&lt;String, String&gt;的泛型，但是可以手动序列化和反序列化，更为简单</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@SpringBootTest</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">SpringDataRedisTests</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Resource</span></span><br><span class="line">    <span class="keyword">private</span> StringRedisTemplate stringRedisTemplate;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">ObjectMapper</span> <span class="variable">objectMapper</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ObjectMapper</span>();</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">testStringRedisTemplate</span><span class="params">()</span> <span class="keyword">throws</span> JsonProcessingException &#123;</span><br><span class="line">        <span class="type">User</span> <span class="variable">user</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">User</span>(<span class="string">&quot;zhangsan&quot;</span>, <span class="number">18</span>);</span><br><span class="line">        <span class="type">String</span> <span class="variable">userJson</span> <span class="operator">=</span> objectMapper.writeValueAsString(user);</span><br><span class="line">        stringRedisTemplate.opsForValue().set(<span class="string">&quot;user:1&quot;</span>, userJson);</span><br><span class="line">        <span class="type">String</span> <span class="variable">s</span> <span class="operator">=</span> stringRedisTemplate.opsForValue().get(<span class="string">&quot;user:1&quot;</span>);</span><br><span class="line">        <span class="keyword">if</span> (!Objects.isNull(s)) &#123;</span><br><span class="line">            <span class="type">User</span> <span class="variable">user1</span> <span class="operator">=</span> objectMapper.readValue(s, User.class);</span><br><span class="line">            System.out.println(user1);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+]]></content>
       <categories>
         <category>学习笔记</category>
       </categories>
       <tags>
-        <tag>linux</tag>
+        <tag>redis</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>吐槽</title>
+    <url>/posts/%E5%90%90%E6%A7%BD/</url>
+    <content><![CDATA[<p>还在部署博客平台，艹了，简直日了狗</p>
+]]></content>
+      <categories>
+        <category>心之所向</category>
+      </categories>
+      <tags>
+        <tag>随笔</tag>
       </tags>
   </entry>
   <entry>
@@ -440,532 +927,45 @@
       </tags>
   </entry>
   <entry>
-    <title>redis</title>
-    <url>/posts/redis/</url>
-    <content><![CDATA[<h1 id="Redis-10大数据类型"><a href="#Redis-10大数据类型" class="headerlink" title="Redis 10大数据类型"></a>Redis 10大数据类型</h1><p>10大数据类型包括：<strong>String</strong>(字符串)，<strong>Bitmap</strong>(位图)，<strong>Bitfield</strong>(位域)，<strong>Hash</strong>(哈希表)，<strong>List</strong>(集合)，<strong>Set</strong>(列表)，<strong>Sorted set</strong>(有序集合 ZSet)，<strong>Geospatial</strong>(地理空间)，<strong>Hyperlog</strong>(基数统计)，<strong>Stream</strong>(流)</p>
-<h1 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h1><ol>
-<li><code>keys *</code>：查看当前库所有的 <em>key</em> </li>
-<li><code>exists [key...]</code>：判断某个 <em>key</em> 是否存在，返回的数字为存在的 <em>key</em> 数量</li>
-<li><code>type key</code>：查看 <em>key</em> 是什么类型</li>
-<li><code>del [key...]</code>：删除指定的 <em>key</em> 数据，返回的数字为删除的 <em>key</em> 数量（原子性，若key很大，则在高并发情况下会产生阻塞队列）</li>
-<li><code>unlink [key...]</code>：非阻塞删除，会在异步中操作（非阻塞，异步操作，不会产生阻塞队列）</li>
-<li><code>ttl key</code>：查看还有多少秒过期，-1表示永不过期，-2表示已过期</li>
-<li><code>expire key</code>：为给定的 <em>key</em> 设置过期时间</li>
-<li><code>move key dbindex[0-15]</code>：将当前数据库的 <em>key</em> 移动到给定的数据库 <em>db</em> 当中，<em>dbindex</em> 直接输入数字即可</li>
-<li><code>select dbindex</code>：切换数据库[0-15]，默认为 0</li>
-<li><code>dbsize</code>：查看当前数据库 <em>key</em> 的数量</li>
-<li><code>flushdb</code>：清空当前库（很危险，尽量不要使用）</li>
-<li><code>flushall</code>：通杀全部库（更危险，最好不要使用）</li>
-</ol>
-<p>备注：</p>
-<blockquote>
-<p>命令不区分大小写，而 <em>key</em> 区分大小写</p>
-<p>永远的帮助命令，help @类型，如help @String，help @List，help @Hash</p>
-</blockquote>
-<h1 id="String类型"><a href="#String类型" class="headerlink" title="String类型"></a>String类型</h1><h2 id="1、set命令"><a href="#1、set命令" class="headerlink" title="1、set命令"></a>1、set命令</h2><ol>
-<li><code>set key value [nx|xx]</code>：*<code>nx</code><em>表示 <em>key</em> 不存在时 <em>set</em> ，</em><code>xx</code>*表示 <em>key</em> 存在时 <em>set</em>，若不符合情况，均返回 <em>null</em></li>
-<li><code>set key value [get]</code>：*<code>get</code>*表示会返回<strong>老值</strong>，同时设置<strong>新值</strong>，若 <em>key</em> 不存在则返回 <em>null</em></li>
-<li><code>set key value [ex seconds|px milliseconds] </code>：*<code>ex seconds</code>* 以秒为单位设置过期时间，*<code>px milliseconds</code>* 以毫秒为单位设置过期时间</li>
-<li><code>set key value [exat unix-time-seconds|pxat unix-time-milliseconds]</code>：*<code>exat unix-time-seconds</code>* 设置以秒为单位的<em>unix</em> 时间戳所对应的时间为过期时间，*<code>pxat unix-time-milliseconds</code>* 设置以毫秒为单位的 <em>unix</em> 时间戳所对应的时间为过期时间</li>
-<li><code>set key value [keepttl]</code>：*<code>keepttl</code>* 保留设置前指定键的生存时间，这样在修改了 <em>key</em> 值后也不会丢失原来的过期时间</li>
-</ol>
-<h2 id="2、mset、mget和msetnx命令"><a href="#2、mset、mget和msetnx命令" class="headerlink" title="2、mset、mget和msetnx命令"></a>2、mset、mget和msetnx命令</h2><ol>
-<li><code>mset key value [key value ...]</code>：同时设置多个键值</li>
-<li><code>mget key [key ...]</code>：同时获取多个键值</li>
-<li><code>msetnx key value [key value ...]</code>：只有不存在键，才能设置值，并且是同时设置，即使只有一个不存在，也不能设置值</li>
-</ol>
-<h2 id="3、getrange和setrange命令"><a href="#3、getrange和setrange命令" class="headerlink" title="3、getrange和setrange命令"></a>3、getrange和setrange命令</h2><ol>
-<li><code>getrange key start end</code>：相当于 <em>Java</em> 中的 <code>subString</code> ，可以截取范围内的字符串</li>
-<li><code>setrange key offset value</code>：从 <em>offset</em> 开始，用 <em>value</em> 覆盖原来的值，<em>value</em> 有多少位，就覆盖多少位</li>
-</ol>
-<h2 id="4、incr、incrby、decr和decrby命令"><a href="#4、incr、incrby、decr和decrby命令" class="headerlink" title="4、incr、incrby、decr和decrby命令"></a>4、incr、incrby、decr和decrby命令</h2><ol>
-<li><code>incr key</code>：递增数字</li>
-<li><code>incrby key increment</code>：增加指定的整数</li>
-<li><code>decr key</code>：递减数字</li>
-<li><code>decrby key decrement</code>：减少指定的整数</li>
-</ol>
-<h2 id="5、strlen和append命令"><a href="#5、strlen和append命令" class="headerlink" title="5、strlen和append命令"></a>5、strlen和append命令</h2><ol>
-<li><code>strlen key</code>：获取字符串长度</li>
-<li><code>append key value</code>：往键值追加指定内容 <em>value</em></li>
-</ol>
-<h2 id="6、setex和setnx命令-分布式锁"><a href="#6、setex和setnx命令-分布式锁" class="headerlink" title="6、setex和setnx命令(分布式锁)"></a>6、setex和setnx命令(分布式锁)</h2><ol>
-<li><code>setex key seconds value</code>：给 <em>key</em> 设置过期时间和值</li>
-<li><code>setnx key value</code>：只有当 <em>key</em> 不存在时，才会设置值</li>
-</ol>
-<h2 id="7、getset命令"><a href="#7、getset命令" class="headerlink" title="7、getset命令"></a>7、getset命令</h2><ol>
-<li><code>getset key value</code>：先 <em>get</em> ，再 <em>set</em> ，和 <code>set key value get</code> 一致</li>
-</ol>
-<h1 id="List类型"><a href="#List类型" class="headerlink" title="List类型"></a>List类型</h1><h2 id="1、lpush、rpush和lrange命令"><a href="#1、lpush、rpush和lrange命令" class="headerlink" title="1、lpush、rpush和lrange命令"></a>1、lpush、rpush和lrange命令</h2><ol>
-<li><code>lpush key element [element ...]</code>：给 <em>key</em> 设置一系列值，并且是从左插入，和链表类似</li>
-<li><code>rpush key element [element ...]</code>：给 <em>key</em> 设置一系列值，并且是从右插入，和链表类似</li>
-<li><code>lrange key start stop</code>：<em>list</em> 类型独有的遍历方式，<em>start</em> 和 <em>stop</em> 取下标，<em>stop</em> 为 -1 时表示遍历<strong>全部</strong></li>
-</ol>
-<h2 id="2、lpop和rpop命令"><a href="#2、lpop和rpop命令" class="headerlink" title="2、lpop和rpop命令"></a>2、lpop和rpop命令</h2><ol>
-<li><code>lpop key [count]</code>：从左开始弹出 <em>key</em> 对应 <em>count</em> 个值，返回的是弹出的值</li>
-<li><code>rpop key [count]</code>：从右开始弹出 <em>key</em> 对应 <em>count</em> 个值，返回的是弹出的值</li>
-</ol>
-<h2 id="3、lindex和llen命令"><a href="#3、lindex和llen命令" class="headerlink" title="3、lindex和llen命令"></a>3、lindex和llen命令</h2><ol>
-<li><code>lindex key index</code>：获取 <em>index</em> 对应的值</li>
-<li><code>llen key</code>：获取列表中元素的个数</li>
-</ol>
-<h2 id="4、lrem和ltrim命令"><a href="#4、lrem和ltrim命令" class="headerlink" title="4、lrem和ltrim命令"></a>4、lrem和ltrim命令</h2><ol>
-<li><code>lrem key count element</code>：删除 <em>count</em> 个值等于 <em>element</em> 的元素</li>
-<li><code>ltrim key start stop</code>：截取指定范围内的值后再赋值给 <em>key</em></li>
-</ol>
-<h2 id="5、rpoplpush命令"><a href="#5、rpoplpush命令" class="headerlink" title="5、rpoplpush命令"></a>5、rpoplpush命令</h2><ol>
-<li><code>rpoplpush source destination</code>：对 <em>surce</em> 执行 <code>rpop</code> 操作后，把 <strong>弹出的元素</strong> 再 <code>lpush</code> 到 <em>destination</em></li>
-</ol>
-<h2 id="6、lset和linsert命令"><a href="#6、lset和linsert命令" class="headerlink" title="6、lset和linsert命令"></a>6、lset和linsert命令</h2><ol>
-<li><code>lset key index element</code>：设置对应 <em>index</em> 位置的元素值为 <em>element</em></li>
-<li><code>linsert key before|after pivot element</code>：在对应 <em>pivot</em> 值的位置前|后，插入 <em>element</em> 值</li>
-</ol>
-<h1 id="Hash类型"><a href="#Hash类型" class="headerlink" title="Hash类型"></a>Hash类型</h1><h2 id="1、hset、hget、hmset、hmget、hgetall和hdel命令"><a href="#1、hset、hget、hmset、hmget、hgetall和hdel命令" class="headerlink" title="1、hset、hget、hmset、hmget、hgetall和hdel命令"></a>1、hset、hget、hmset、hmget、hgetall和hdel命令</h2><ol>
-<li><code>hset key field value [field value ...]</code>：设置 <em>key</em> 对应的键值对，可以设置多个</li>
-<li><code>hget key field</code>：获取 <em>key</em> 对应的键的值</li>
-<li><code>hmset key field value [field value ...]</code>：和 <code>hset</code> 用法差不多</li>
-<li><code>hmget key field [field ...]</code>：可以获取 <em>key</em> 多个键的值</li>
-<li><code>hgetall key</code>：可以获取 <em>key</em> 对应的多个键值对</li>
-<li><code>hdel key field [field ...]</code>：删除 <em>key</em> 多个键</li>
-</ol>
-<h2 id="2、hlen命令"><a href="#2、hlen命令" class="headerlink" title="2、hlen命令"></a>2、hlen命令</h2><ol>
-<li><code>hlen key</code>：获取 <em>key</em> 全部键的个数</li>
-</ol>
-<h2 id="3、hexists-命令"><a href="#3、hexists-命令" class="headerlink" title="3、hexists 命令"></a>3、hexists 命令</h2><ol>
-<li><code>hexists key field</code>：判断 <em>key</em> 对应的键是否存在，若存在则返回 1，不存在返回 0</li>
-</ol>
-<h2 id="4、hkeys和hvals命令"><a href="#4、hkeys和hvals命令" class="headerlink" title="4、hkeys和hvals命令"></a>4、hkeys和hvals命令</h2><ol>
-<li><code>hkeys key</code>：获取 <em>key</em> 所有的键</li>
-<li><code>hvals key</code>：获取 <em>key</em> 多有的值</li>
-</ol>
-<h2 id="5、hincrby和hincrbyfloat命令"><a href="#5、hincrby和hincrbyfloat命令" class="headerlink" title="5、hincrby和hincrbyfloat命令"></a>5、hincrby和hincrbyfloat命令</h2><ol>
-<li><code>hincrby key field increment</code>：给 <em>key</em> 对应的键值加上 <em>increment</em> ，但是键对应的值只能为数字，否则会报错</li>
-<li><code>hincrbyfloat key field increment</code>：给 <em>key</em> 对应的键值加上 <em>increment</em> ，<em>increment</em> 可以为浮点数</li>
-</ol>
-<h2 id="6、hsetnx命令"><a href="#6、hsetnx命令" class="headerlink" title="6、hsetnx命令"></a>6、hsetnx命令</h2><ol>
-<li><code>hsetnx key field value</code>：给 <em>key</em> 设置键值，但是这个键必须不存在，否则会报错</li>
-</ol>
-<h1 id="Set类型"><a href="#Set类型" class="headerlink" title="Set类型"></a>Set类型</h1><h2 id="基本命令"><a href="#基本命令" class="headerlink" title="基本命令"></a>基本命令</h2><h3 id="1、sadd命令"><a href="#1、sadd命令" class="headerlink" title="1、sadd命令"></a>1、sadd命令</h3><ol>
-<li><code>sadd key member [member ...]</code>：往 <em>key</em> 里面添加成员，可以添加多个，但不能重复</li>
-</ol>
-<h3 id="2、smembers命令"><a href="#2、smembers命令" class="headerlink" title="2、smembers命令"></a>2、smembers命令</h3><ol>
-<li><code>smembers key</code>：获取 <em>key</em> 全部的成员</li>
-</ol>
-<h3 id="3、sismember命令"><a href="#3、sismember命令" class="headerlink" title="3、sismember命令"></a>3、sismember命令</h3><ol>
-<li><code>sismember key member</code>：查看 <em>key</em> 是否有成员 <em>member</em> ，若没有则返回 0，有则返回 1</li>
-</ol>
-<h3 id="4、srem命令"><a href="#4、srem命令" class="headerlink" title="4、srem命令"></a>4、srem命令</h3><ol>
-<li><code>srem key member [member ...]</code>：删除 <em>key</em> 里面的成员，可以删除多个</li>
-</ol>
-<h3 id="5、scard命令"><a href="#5、scard命令" class="headerlink" title="5、scard命令"></a>5、scard命令</h3><ol>
-<li><code>scard key</code>：获取 <em>key</em> 里面的成员个数</li>
-</ol>
-<h3 id="6、srandmember命令"><a href="#6、srandmember命令" class="headerlink" title="6、srandmember命令"></a>6、srandmember命令</h3><ol>
-<li><code>srandmember key [count]</code>：随机获取 <em>key</em> 里面的 <em>count</em> 个成员，成员不删除</li>
-</ol>
-<h3 id="7、spop命令"><a href="#7、spop命令" class="headerlink" title="7、spop命令"></a>7、spop命令</h3><ol>
-<li><code>spop key [count]</code>：随机弹出 <em>key</em> 里面 <em>count</em> 个值，成员会删除</li>
-</ol>
-<h3 id="8、smove命令"><a href="#8、smove命令" class="headerlink" title="8、smove命令"></a>8、smove命令</h3><ol>
-<li><code>smove source destination member</code>：从 <code>source</code> 中移动成员到 <code>destination</code> 中</li>
-</ol>
-<h2 id="集合运算"><a href="#集合运算" class="headerlink" title="集合运算"></a>集合运算</h2><h3 id="1、差集运算-sdiff"><a href="#1、差集运算-sdiff" class="headerlink" title="1、差集运算(sdiff)"></a>1、差集运算(sdiff)</h3><ol>
-<li><code>sdiff key [key ...]</code>：获取两个 <em>key</em> 之间的差集，如 A-B，获取 A 中有的，B 中没有的</li>
-</ol>
-<h3 id="2、并集运算-sunion"><a href="#2、并集运算-sunion" class="headerlink" title="2、并集运算(sunion)"></a>2、并集运算(sunion)</h3><ol>
-<li><code>sunion key [key ...]</code>：获取两个 <em>key</em> 之间的并集</li>
-</ol>
-<h3 id="3、交集运算-sinter和sintercard"><a href="#3、交集运算-sinter和sintercard" class="headerlink" title="3、交集运算(sinter和sintercard)"></a>3、交集运算(sinter和sintercard)</h3><ol>
-<li><code>sinter key [key ...]</code>：获取两个 <em>key</em> 之间的交集</li>
-<li><code>sintercard numkeys key [key ...] [LIMIT limit]</code>：获取 <em>numkeys</em> 个 <em>key</em> 的交集元素个数，后面的 <em>limit</em> 表示显示几个</li>
-</ol>
-<h1 id="ZSet类型"><a href="#ZSet类型" class="headerlink" title="ZSet类型"></a>ZSet类型</h1><h2 id="1、zadd命令"><a href="#1、zadd命令" class="headerlink" title="1、zadd命令"></a>1、zadd命令</h2><ol>
-<li><code>zadd key [NX|XX] [GT|LT] [CH] [INCR] score member [score member ...]</code>：往 <em>key</em> 里面添加成员和分数</li>
-</ol>
-<h2 id="2、zrange命令"><a href="#2、zrange命令" class="headerlink" title="2、zrange命令"></a>2、zrange命令</h2><ol>
-<li><code>zrange key start stop [byscore|bylex] [rev] [LIMIT offset count] [WITHSCORES]</code>：遍历 <em>key</em> ，<em>withscores</em> 表示可以带着分数</li>
-</ol>
-<h2 id="3、zrevrange命令"><a href="#3、zrevrange命令" class="headerlink" title="3、zrevrange命令"></a>3、zrevrange命令</h2><ol>
-<li><code>zrevrange key start stop [WITHSCORES]</code>：反向遍历 <em>key</em> ，其他的和 <code>zrange</code> 一样</li>
-</ol>
-<h2 id="4、zrangebyscore命令"><a href="#4、zrangebyscore命令" class="headerlink" title="4、zrangebyscore命令"></a>4、zrangebyscore命令</h2><ol>
-<li><code>zrangebyscore key min max [WITHSCORES] [LIMIT offset count]</code>：遍历 <em>key</em> ，从规定的最小值到最大值，即 <code>&gt;=,&lt;=</code> ，可以用 <em>offset</em> 指定返回的数量，如果 <em>min</em> 和 <em>max</em> 的左边带有<code>(</code>，如 <code>(min</code> 或者 <code>(max</code> ，表示 <code>&gt;</code> 或者 <code>&lt;</code></li>
-</ol>
-<h2 id="5、zscore命令"><a href="#5、zscore命令" class="headerlink" title="5、zscore命令"></a>5、zscore命令</h2><ol>
-<li><code>zscore key member</code>：获取 <em>key</em> 对应成员的分数</li>
-</ol>
-<h2 id="6、zcard命令"><a href="#6、zcard命令" class="headerlink" title="6、zcard命令"></a>6、zcard命令</h2><ol>
-<li><code>zcard key</code>：获取 <em>key</em> 的成员个数</li>
-</ol>
-<h2 id="7、zrem命令"><a href="#7、zrem命令" class="headerlink" title="7、zrem命令"></a>7、zrem命令</h2><ol>
-<li><code>zrem key member [member ...]</code>：删除 <em>key</em> 的成员，可以删除多个</li>
-</ol>
-<h2 id="8、zincrby命令"><a href="#8、zincrby命令" class="headerlink" title="8、zincrby命令"></a>8、zincrby命令</h2><ol>
-<li><code>zincrby key increment member</code>：给 <em>key</em> 对应的成员分数增加 <em>increment</em></li>
-</ol>
-<h2 id="9、zcount命令"><a href="#9、zcount命令" class="headerlink" title="9、zcount命令"></a>9、zcount命令</h2><ol>
-<li><code>zcount key min max</code>：获得 <em>key</em> 在 <em>min</em> 到 <em>max</em> 范围内的成员个数</li>
-</ol>
-<h2 id="10、zmpop命令"><a href="#10、zmpop命令" class="headerlink" title="10、zmpop命令"></a>10、zmpop命令</h2><ol>
-<li><code>zmpop numkeys key [key ...] MIN|MAX [COUNT count]</code>：从 <em>numkeys</em> 个 <em>key</em> 中弹出最小(MIN)或最大(MAX)分数的成员，弹出 <em>count</em> 个</li>
-</ol>
-<h2 id="11、zrank命令"><a href="#11、zrank命令" class="headerlink" title="11、zrank命令"></a>11、zrank命令</h2><ol>
-<li><code>zrank key member [WITHSCORES]</code>：正序获取 <em>key</em> 对应成员的下标值</li>
-</ol>
-<h2 id="12、zrevrank命令"><a href="#12、zrevrank命令" class="headerlink" title="12、zrevrank命令"></a>12、zrevrank命令</h2><ol>
-<li><code>zrevrank key member [WITHSCORES]</code>：逆序获取 <em>key</em> 对应成员的下标值</li>
-</ol>
-<h1 id="Bitmap类型"><a href="#Bitmap类型" class="headerlink" title="Bitmap类型"></a>Bitmap类型</h1><p><em><strong>*************************************底层是 String*********************************</strong></em></p>
-<h2 id="1、setbit命令"><a href="#1、setbit命令" class="headerlink" title="1、setbit命令"></a>1、setbit命令</h2><ol>
-<li><code>setbit key offset value</code>：设置 <em>key</em> 的偏移量的值为多少，<em>offset</em> 从 0 开始，<strong><em>value</em> 只能为 0 或 1</strong></li>
-</ol>
-<h2 id="2、getbit命令"><a href="#2、getbit命令" class="headerlink" title="2、getbit命令"></a>2、getbit命令</h2><ol>
-<li><code>getbit key offset</code>：获得 <em>key</em> 偏移量 <em>offset</em> 的值</li>
-</ol>
-<h2 id="3、strlen命令"><a href="#3、strlen命令" class="headerlink" title="3、strlen命令"></a>3、strlen命令</h2><ol>
-<li><code>strlen key</code>：获得 <em>key</em> 占据几个字节，不是获得字符串的长度，超过 8 位后自己按照 8 位一组一byte再扩容</li>
-</ol>
-<h2 id="4、bitcount命令"><a href="#4、bitcount命令" class="headerlink" title="4、bitcount命令"></a>4、bitcount命令</h2><ol>
-<li><code>bitcount key [start end [BYTE|BIT]]</code>：获取  <em>key</em> 里面从 <em>start</em> 位到 <em>end</em> 位含有 1 的位数，默认是 <em>BYTE</em> 单位，最好是用 <em>BIT</em> 作为单位</li>
-</ol>
-<h2 id="5、bitop命令"><a href="#5、bitop命令" class="headerlink" title="5、bitop命令"></a>5、bitop命令</h2><ol>
-<li><code>BITOP AND|OR|XOR|NOT destkey key [key ...]</code>：让多个 <em>key</em> 可以进行 <em><strong>位运算</strong></em> (与  或  异或  非)，结果给 <em>destkey</em></li>
-</ol>
-<h1 id="HyperLogLog类型"><a href="#HyperLogLog类型" class="headerlink" title="HyperLogLog类型"></a>HyperLogLog类型</h1><p><em><strong>*************************************基数统计，底层是String*********************************</strong></em></p>
-<h2 id="1、pfadd命令"><a href="#1、pfadd命令" class="headerlink" title="1、pfadd命令"></a>1、pfadd命令</h2><ol>
-<li><code>pfadd key [element [element ...]]</code>：往 <em>key</em> 里面插入 <em>element</em> 元素</li>
-</ol>
-<h2 id="2、pfcount命令"><a href="#2、pfcount命令" class="headerlink" title="2、pfcount命令"></a>2、pfcount命令</h2><ol>
-<li><code>pfcount key [key ...]</code>：去掉重复的元素后，统计剩下的元素个数，多个 <em>key</em> ，会统计总的去掉重复元素之后的个数</li>
-</ol>
-<h2 id="3、pfmerge命令"><a href="#3、pfmerge命令" class="headerlink" title="3、pfmerge命令"></a>3、pfmerge命令</h2><ol>
-<li><code>pfmerge destkey [sourcekey [sourcekey ...]]</code>：合并多个 <em>sourcekey</em> 到 <em>destkey</em> 中，并去掉重复元素</li>
-</ol>
-<h1 id="GEO类型"><a href="#GEO类型" class="headerlink" title="GEO类型"></a>GEO类型</h1><p><em><strong>*************************************底层是ZSet*********************************</strong></em></p>
-<p><em><strong>**************************中文乱码，在redis-cli后面加上–raw*************************</strong></em></p>
-<h2 id="1、geoadd命令"><a href="#1、geoadd命令" class="headerlink" title="1、geoadd命令"></a>1、geoadd命令</h2><ol>
-<li><code>geoadd key [NX|XX] [CH] longitude latitude member [longitude latitude member ...]</code>：<em>longitude</em> 经度，<em>latitude</em> 纬度，<em>member</em> 位置名称</li>
-</ol>
-<h2 id="2、geopos命令"><a href="#2、geopos命令" class="headerlink" title="2、geopos命令"></a>2、geopos命令</h2><ol>
-<li><code>geopos key [member [member ...]]</code>：返回经纬度</li>
-</ol>
-<h2 id="3、geohash命令"><a href="#3、geohash命令" class="headerlink" title="3、geohash命令"></a>3、geohash命令</h2><ol>
-<li><code>geohash key [member [member ...]]</code>：返回经纬度坐标的geohash表示</li>
-</ol>
-<h2 id="4、geodist命令"><a href="#4、geodist命令" class="headerlink" title="4、geodist命令"></a>4、geodist命令</h2><ol>
-<li><code>geodist key member1 member2 [M|KM|FT|MI]</code>：两个位置之间的距离，后面跟单位 <em>KM</em> 千米，<em>M</em> 米，<em>FT</em> 英尺，<em>MI</em> 英里</li>
-</ol>
-<h2 id="5、georadius命令"><a href="#5、georadius命令" class="headerlink" title="5、georadius命令"></a>5、georadius命令</h2><ol>
-<li><code>georadius key longitude latitude radius M|KM|FT|MI [WITHCOORD] [WITHDIST] [WITHHASH] [COUNT count [ANY]] [ASC|DESC] [STORE key|STOREDIST key]</code>：以给定的经纬度为中心，返回键包含的位置元素当中，与中心的距离不超过给定最大距离(<em><strong>radius</strong></em>)的所有位置元素，<em><strong>withdist</strong></em>：返回位置元素的同时，将位置元素与中心之间的距离也一并返回，<em><strong>withcoord</strong></em>：将位置元素的经度与纬度一并返回，<em><strong>withhash</strong></em>：以52位有符号整数的形式，返回位置元素经过原始<em><strong>geohash</strong></em>编码的有序集合分值，<em><strong>count</strong></em>：限定返回的记录数</li>
-</ol>
-<h2 id="6、georadiusbymember命令"><a href="#6、georadiusbymember命令" class="headerlink" title="6、georadiusbymember命令"></a>6、georadiusbymember命令</h2><ol>
-<li><code>georadiusbymember key member radius M|KM|FT|MI [WITHCOORD] [WITHDIST] [WITHHASH] [COUNT count [ANY]] [ASC|DESC] [STORE key|STOREDIST key]</code>：根据位置名称查找，和 <em><strong>georadius</strong></em> 的用法差不多</li>
-</ol>
-<h1 id="Stream类型"><a href="#Stream类型" class="headerlink" title="Stream类型"></a>Stream类型</h1><h2 id="队列相关指令"><a href="#队列相关指令" class="headerlink" title="队列相关指令"></a>队列相关指令</h2><h3 id="1、xadd命令"><a href="#1、xadd命令" class="headerlink" title="1、xadd命令"></a>1、xadd命令</h3><ol>
-<li><code>xadd key [NOMKSTREAM] [MAXLEN|MINID [=|~] threshold [LIMIT count]] *|id field value [field value ...]</code>：添加消息到队列末尾，* 表示自动生成 <em><strong>MessageID</strong></em>，若不加 <em>，则要自己手动加 <em><strong>ID</strong></em>，后面顺序跟着一堆业务 <em><strong>field</strong></em>，</em><strong>value</strong>*</li>
-</ol>
-<h3 id="2、xtrim命令"><a href="#2、xtrim命令" class="headerlink" title="2、xtrim命令"></a>2、xtrim命令</h3><ol>
-<li><code>xtrim key MAXLEN|MINID [=|~] threshold [LIMIT count]</code>：对 <em><strong>Stream</strong></em> 的长度进行截取，<em><strong>maxlen</strong></em> 允许的最大长度，<em><strong>minid</strong></em> 允许的最小 <em><strong>id</strong></em></li>
-</ol>
-<h3 id="3、xdel命令"><a href="#3、xdel命令" class="headerlink" title="3、xdel命令"></a>3、xdel命令</h3><ol>
-<li><code>xdel key id [id ...]</code>：删除 <em><strong>key</strong></em> 对应的 <em><strong>id</strong></em></li>
-</ol>
-<h3 id="4、xlen命令"><a href="#4、xlen命令" class="headerlink" title="4、xlen命令"></a>4、xlen命令</h3><ol>
-<li><code>xlen key</code>：获取 <em><strong>key</strong></em> 里面成员的数量</li>
-</ol>
-<h3 id="5、xrange命令"><a href="#5、xrange命令" class="headerlink" title="5、xrange命令"></a>5、xrange命令</h3><ol>
-<li><code>xrange key start end [COUNT count]</code>：<em><strong>start</strong></em> 表示开始值，<code>-</code>代表最小值，<em><strong>end</strong></em> 表示结束值，<code>+</code> 代表最大值，<em><strong>count</strong></em> 代表最多可以获取多少个值</li>
-</ol>
-<h3 id="6、xrevrange命令"><a href="#6、xrevrange命令" class="headerlink" title="6、xrevrange命令"></a>6、xrevrange命令</h3><ol>
-<li><code>xrevrange key end start [COUNT count]</code>：<em><strong>end</strong></em> 取 <code>+</code>，<em><strong>start</strong></em> 取 <code>-</code></li>
-</ol>
-<h3 id="7、xread命令"><a href="#7、xread命令" class="headerlink" title="7、xread命令"></a>7、xread命令</h3><ol>
-<li><code>xread [COUNT count] [BLOCK milliseconds] STREAMS key [key ...] id [id ...]</code>：<em><strong>count</strong></em> 最多读取多少条消息，<em><strong>block</strong></em> 是否已阻塞的方式读取消息，默认不阻塞，如果 <code>milliseconds</code> 设置为 0，表示永远阻塞，***$*** 表示从尾，<em><strong>0</strong></em> 表示从头</li>
-</ol>
-<h2 id="消费组相关指令"><a href="#消费组相关指令" class="headerlink" title="消费组相关指令"></a>消费组相关指令</h2><h3 id="1、xgroup-create指令"><a href="#1、xgroup-create指令" class="headerlink" title="1、xgroup create指令"></a>1、xgroup create指令</h3><ol>
-<li><code>xgroup create key group id|$ [MKSTREAM] [ENTRIESREAD entries-read]</code>：用于创建消费者组</li>
-</ol>
-<h3 id="2、xreadgroup命令"><a href="#2、xreadgroup命令" class="headerlink" title="2、xreadgroup命令"></a>2、xreadgroup命令</h3><ol>
-<li><code>GROUP group consumer [COUNT count] [BLOCK milliseconds] [NOACK] STREAMS key [key ...] id [id ...]</code>：<code>&gt;</code> 表示从第一条尚未被消费的消息开始读取，消费组 <em>group</em> 内的消费者 <em>consumer</em> 从 <em>key</em> 消息队列中读取所有消息</li>
-</ol>
-<h3 id="3、xpending命令"><a href="#3、xpending命令" class="headerlink" title="3、xpending命令"></a>3、xpending命令</h3><ol>
-<li><code>xpending key group [[IDLE min-idle-time] start end count [consumer]]</code>：查询每个消费组内所有消费者(已读取，但尚未确认)的消息，查看某个消费者具体读了哪些数据</li>
-</ol>
-<h3 id="4、xack命令"><a href="#4、xack命令" class="headerlink" title="4、xack命令"></a>4、xack命令</h3><ol>
-<li><code>xack key group id [id ...]</code>：向消息队列确认消息处理已完成</li>
-</ol>
-<h3 id="5、xinfo-stream命令"><a href="#5、xinfo-stream命令" class="headerlink" title="5、xinfo stream命令"></a>5、xinfo stream命令</h3><ol>
-<li><code>xinfo stream key [FULL [COUNT count]]</code>：用于打印 Stream\Consumer\Group的详细信息</li>
-</ol>
-<h1 id="redis客户端"><a href="#redis客户端" class="headerlink" title="redis客户端"></a>redis客户端</h1><h2 id="1、Jedis"><a href="#1、Jedis" class="headerlink" title="1、Jedis"></a>1、Jedis</h2><h3 id="使用方法"><a href="#使用方法" class="headerlink" title="使用方法"></a>使用方法</h3><ol>
-<li><p>在springboot中引入依赖</p>
-<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="comment">&lt;!--   使用 jedis 作为 redis客户端    --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>redis.clients<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>jedis<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>3.7.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>测试jedis</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@SpringBootTest</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">RedisTestApplicationTests</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Jedis jedis;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@BeforeEach</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setUp</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="comment">// 建立连接</span></span><br><span class="line">        jedis = <span class="keyword">new</span> <span class="title class_">Jedis</span>(<span class="string">&quot;192.168.65.128&quot;</span>, <span class="number">6379</span>);</span><br><span class="line">        <span class="comment">// 设置密码</span></span><br><span class="line">        jedis.auth(<span class="string">&quot;111111&quot;</span>);</span><br><span class="line">        <span class="comment">// 选择库</span></span><br><span class="line">        jedis.select(<span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">testJedis</span><span class="params">()</span> &#123;</span><br><span class="line">        Set&lt;String&gt; keys = jedis.keys(<span class="string">&quot;*&quot;</span>);</span><br><span class="line">        keys.forEach(System.out::println);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@AfterEach</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setDown</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="comment">// 关闭连接</span></span><br><span class="line">        <span class="keyword">if</span> (jedis != <span class="literal">null</span>) &#123;</span><br><span class="line">            jedis.close();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-</ol>
-<h3 id="jedis连接池"><a href="#jedis连接池" class="headerlink" title="jedis连接池"></a>jedis连接池</h3><p>Jedis本身是线程不安全的，并且频繁的创建和销毁连接会有性能损耗，因此推荐使用Jedis连接池代替Jedis直连方式</p>
-<h3 id="连接池配置"><a href="#连接池配置" class="headerlink" title="连接池配置"></a>连接池配置</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">JedisConnectFactory</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> JedisPool jedisPool;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        <span class="comment">// 配置连接池</span></span><br><span class="line">        <span class="type">JedisPoolConfig</span> <span class="variable">jedisPoolConfig</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">JedisPoolConfig</span>();</span><br><span class="line">        <span class="comment">// 最大连接数</span></span><br><span class="line">        jedisPoolConfig.setMaxTotal(<span class="number">8</span>);</span><br><span class="line">        <span class="comment">// 最大空闲连接数</span></span><br><span class="line">        jedisPoolConfig.setMaxIdle(<span class="number">8</span>);</span><br><span class="line">        <span class="comment">// 最小空闲连接数</span></span><br><span class="line">        jedisPoolConfig.setMinIdle(<span class="number">0</span>);</span><br><span class="line">        <span class="comment">// 等待时长</span></span><br><span class="line">        jedisPoolConfig.setMaxWait(Duration.ofMillis(<span class="number">1000</span>));</span><br><span class="line">        <span class="comment">// 配置连接池对象</span></span><br><span class="line">        jedisPool = <span class="keyword">new</span> <span class="title class_">JedisPool</span>(jedisPoolConfig,</span><br><span class="line">                <span class="string">&quot;192.168.65.128&quot;</span>, <span class="number">6379</span>, <span class="number">1000</span>, <span class="string">&quot;111111&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> Jedis <span class="title function_">getJedis</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> jedisPool.getResource();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>在测试方法处，直接调用即可</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@BeforeEach</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setUp</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="comment">// 建立连接</span></span><br><span class="line">    <span class="comment">// jedis = new Jedis(&quot;192.168.65.128&quot;, 6379);</span></span><br><span class="line">    <span class="comment">// 连接处创建 Jedis</span></span><br><span class="line">    jedis = JedisConnectFactory.getJedis();</span><br><span class="line">    <span class="comment">// 设置密码</span></span><br><span class="line">    jedis.auth(<span class="string">&quot;111111&quot;</span>);</span><br><span class="line">    <span class="comment">// 选择库</span></span><br><span class="line">    jedis.select(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="2、SpringDataRedis"><a href="#2、SpringDataRedis" class="headerlink" title="2、SpringDataRedis"></a>2、SpringDataRedis</h2><h3 id="使用方法-1"><a href="#使用方法-1" class="headerlink" title="使用方法"></a>使用方法</h3><ol>
-<li><p>引入依赖</p>
-<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 引入 redis --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-data-redis<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!--   连接池依赖(commons-pool)    --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.commons<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>commons-pool2<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>写入配置</p>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">redis:</span></span><br><span class="line">    <span class="attr">host:</span> <span class="number">192.168</span><span class="number">.65</span><span class="number">.128</span></span><br><span class="line">    <span class="attr">port:</span> <span class="number">6379</span></span><br><span class="line">    <span class="attr">password:</span> <span class="number">111111</span></span><br><span class="line">    <span class="attr">lettuce:</span></span><br><span class="line">      <span class="attr">pool:</span></span><br><span class="line">        <span class="attr">max-active:</span> <span class="number">8</span></span><br><span class="line">        <span class="attr">max-idle:</span> <span class="number">8</span></span><br><span class="line">        <span class="attr">min-idle:</span> <span class="number">0</span></span><br><span class="line">        <span class="attr">max-wait:</span> <span class="string">100ms</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>测试方法</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@SpringBootTest</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">SpringDataRedisTests</span> &#123;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> RedisTemplate&lt;String, Object&gt; redisTemplate;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">testString</span><span class="params">()</span> &#123;</span><br><span class="line">        redisTemplate.opsForValue().set(<span class="string">&quot;name&quot;</span>, <span class="string">&quot;zhangsan&quot;</span>);</span><br><span class="line">        <span class="type">Object</span> <span class="variable">name</span> <span class="operator">=</span> redisTemplate.opsForValue().get(<span class="string">&quot;name&quot;</span>);</span><br><span class="line">        System.out.println(name);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-</ol>
-<h3 id="配置redis"><a href="#配置redis" class="headerlink" title="配置redis"></a>配置redis</h3><p>对redis配置之后，存入对象就不会以字节的形式表示出来了，实现了序列化和反序列化的重新配置</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">RedisConfig</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Resource</span></span><br><span class="line">    <span class="keyword">private</span> RedisConnectionFactory redisConnectionFactory;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="keyword">public</span> RedisTemplate&lt;String, Object&gt; <span class="title function_">redisTemplate</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="comment">// 创建 redisTemplate 对象</span></span><br><span class="line">        RedisTemplate&lt;String, Object&gt; redisTemplate = <span class="keyword">new</span> <span class="title class_">RedisTemplate</span>&lt;&gt;();</span><br><span class="line">        <span class="comment">// 设置连接工厂</span></span><br><span class="line">        redisTemplate.setConnectionFactory(redisConnectionFactory);</span><br><span class="line">        <span class="comment">// 创建 JSON 序列化工具</span></span><br><span class="line">        <span class="type">GenericJackson2JsonRedisSerializer</span> <span class="variable">jsonRedisSerializer</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">GenericJackson2JsonRedisSerializer</span>();</span><br><span class="line">        <span class="comment">// 设置 key 的序列化</span></span><br><span class="line">        redisTemplate.setKeySerializer(RedisSerializer.string());</span><br><span class="line">        redisTemplate.setHashKeySerializer(RedisSerializer.string());</span><br><span class="line">        <span class="comment">// 设置 value 的序列化</span></span><br><span class="line">        redisTemplate.setValueSerializer(jsonRedisSerializer);</span><br><span class="line">        redisTemplate.setHashValueSerializer(jsonRedisSerializer);</span><br><span class="line">        <span class="comment">// 返回</span></span><br><span class="line">        <span class="keyword">return</span> redisTemplate;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="使用-StringRedisTemplate"><a href="#使用-StringRedisTemplate" class="headerlink" title="使用 StringRedisTemplate"></a>使用 StringRedisTemplate</h3><p>StringRedisTemplate只能使用&lt;String, String&gt;的泛型，但是可以手动序列化和反序列化，更为简单</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@SpringBootTest</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">SpringDataRedisTests</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Resource</span></span><br><span class="line">    <span class="keyword">private</span> StringRedisTemplate stringRedisTemplate;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">ObjectMapper</span> <span class="variable">objectMapper</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ObjectMapper</span>();</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">testStringRedisTemplate</span><span class="params">()</span> <span class="keyword">throws</span> JsonProcessingException &#123;</span><br><span class="line">        <span class="type">User</span> <span class="variable">user</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">User</span>(<span class="string">&quot;zhangsan&quot;</span>, <span class="number">18</span>);</span><br><span class="line">        <span class="type">String</span> <span class="variable">userJson</span> <span class="operator">=</span> objectMapper.writeValueAsString(user);</span><br><span class="line">        stringRedisTemplate.opsForValue().set(<span class="string">&quot;user:1&quot;</span>, userJson);</span><br><span class="line">        <span class="type">String</span> <span class="variable">s</span> <span class="operator">=</span> stringRedisTemplate.opsForValue().get(<span class="string">&quot;user:1&quot;</span>);</span><br><span class="line">        <span class="keyword">if</span> (!Objects.isNull(s)) &#123;</span><br><span class="line">            <span class="type">User</span> <span class="variable">user1</span> <span class="operator">=</span> objectMapper.readValue(s, User.class);</span><br><span class="line">            System.out.println(user1);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>学习笔记</category>
-      </categories>
-      <tags>
-        <tag>redis</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>test</title>
-    <url>/posts/test/</url>
-    <content><![CDATA[<p><strong>这里是测试博客</strong></p>
-<p><img src="/posts/test/Vue%E5%8E%9F%E5%9E%8B%E9%93%BE.png" alt="vue"></p>
-<blockquote>
-<p>这里终于可以上传图片了</p>
-</blockquote>
-]]></content>
-      <categories>
-        <category>心之所向</category>
-      </categories>
-      <tags>
-        <tag>test</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Markdown语法</title>
-    <url>/posts/Markdown%E8%AF%AD%E6%B3%95/</url>
-    <content><![CDATA[<h1 id="Markdown-基础语法"><a href="#Markdown-基础语法" class="headerlink" title="Markdown 基础语法"></a>Markdown 基础语法</h1><h2 id="1-Markdown-标题"><a href="#1-Markdown-标题" class="headerlink" title="(1) Markdown 标题"></a>(1) Markdown 标题</h2><figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 一级标题</span></span><br><span class="line"><span class="comment">## 二级标题</span></span><br><span class="line"><span class="comment">### 三级标题</span></span><br><span class="line"><span class="comment">#### 四级标题</span></span><br><span class="line"><span class="comment">##### 五级标题</span></span><br><span class="line"><span class="comment">###### 六级标题</span></span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="2-Markdown-文本"><a href="#2-Markdown-文本" class="headerlink" title="(2) Markdown 文本"></a>(2) Markdown 文本</h2><figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="string">*斜体文本*</span></span><br><span class="line"><span class="string">**粗体文本**</span></span><br><span class="line"><span class="string">***斜粗体文本***</span></span><br><span class="line"><span class="string">_斜体文本_</span></span><br><span class="line"><span class="string">__粗体文本__</span></span><br><span class="line"><span class="string">___斜粗体文本___</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="例如"><a href="#例如" class="headerlink" title="例如"></a>例如</h3><p><em>斜体文本</em></p>
-<p><strong>粗体文本</strong></p>
-<p><em><strong>斜粗体文本</strong></em></p>
-<p><em>斜体文本</em></p>
-<p><strong>粗体文本</strong></p>
-<p><em><strong>斜粗体文本</strong></em></p>
-<h2 id="3-Markdown-列表"><a href="#3-Markdown-列表" class="headerlink" title="(3) Markdown 列表"></a>(3) Markdown 列表</h2><ul>
-<li>无序列表，使用 <strong>星号</strong>(<em>****)、<strong>加号</strong>(</em><em>+<strong>)、</strong>减号*</em>(<strong>-</strong>) 加一个 <strong>空格</strong> 作为列表标记</li>
-<li>有序列表，使用 <strong>数字</strong>再加上 (<strong>.</strong>) <strong>号</strong>，再加上一个 <strong>空格</strong> 作为列表标记</li>
-</ul>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="string">*</span> <span class="string">无序列表</span> <span class="number">1</span></span><br><span class="line"><span class="string">+</span> <span class="string">无序列表</span> <span class="number">2</span></span><br><span class="line"><span class="bullet">-</span> <span class="string">无需列表</span> <span class="number">3</span></span><br><span class="line"></span><br><span class="line"><span class="number">1</span><span class="string">.</span> <span class="string">有序列表</span> <span class="number">1</span></span><br><span class="line"><span class="number">2</span><span class="string">.</span> <span class="string">有序列表</span> <span class="number">2</span></span><br><span class="line"><span class="number">3</span><span class="string">.</span> <span class="string">有序列表</span> <span class="number">3</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="例如-1"><a href="#例如-1" class="headerlink" title="例如"></a>例如</h3><ul>
-<li><p>无序列表 1</p>
-</li>
-<li><p>无序列表 2</p>
-<ul>
-<li>无序列表 3</li>
-</ul>
-</li>
-</ul>
+    <title>linux</title>
+    <url>/posts/linux/</url>
+    <content><![CDATA[<h1 id="vim编辑器"><a href="#vim编辑器" class="headerlink" title="vim编辑器"></a>vim编辑器</h1><h2 id="1、查找功能"><a href="#1、查找功能" class="headerlink" title="1、查找功能"></a>1、查找功能</h2><h3 id="（1）、匹配"><a href="#（1）、匹配" class="headerlink" title="（1）、匹配"></a>（1）、匹配</h3><ul>
+<li><p>片段匹配</p>
 <ol>
-<li>有序列表 1</li>
-<li>有序列表 2</li>
-<li>有序列表 3</li>
+<li>从上往下找，比如“hello”：&#x2F;hello</li>
+<li>从下往上找，比如”hello“：?hello</li>
 </ol>
-<h2 id="4-Markdown-链接"><a href="#4-Markdown-链接" class="headerlink" title="(4) Markdown 链接"></a>(4) Markdown 链接</h2><figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line">[<span class="string">链接名称</span>]<span class="string">(链接地址)</span></span><br><span class="line">[<span class="string">百度</span>]<span class="string">(https://www.baidu.com)</span></span><br><span class="line"></span><br><span class="line"><span class="string">或者</span></span><br><span class="line"></span><br><span class="line"><span class="string">&lt;链接地址&gt;</span></span><br><span class="line"><span class="string">&lt;https://www.baidu.com&gt;</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="例如-2"><a href="#例如-2" class="headerlink" title="例如"></a>例如</h3><p><a href="https://www.baidu.com/">百度</a></p>
-<p><a href="https://www.baidu.com/">https://www.baidu.com</a></p>
-<h2 id="5-Markdown-引用"><a href="#5-Markdown-引用" class="headerlink" title="(5) Markdown 引用"></a>(5) Markdown 引用</h2><p>引用的格式是在符号 <strong>&gt;</strong> 后面书写文字，或者加一个空格在书写文字</p>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="string">&gt;这是一个引用</span></span><br><span class="line"><span class="string">&gt;</span> <span class="string">这是一个引用</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="例如-3"><a href="#例如-3" class="headerlink" title="例如"></a>例如</h3><blockquote>
-<p>这是一个引用</p>
-</blockquote>
-<blockquote>
-<p>这是一个引用</p>
-</blockquote>
-<h2 id="6-Markdown-分割线"><a href="#6-Markdown-分割线" class="headerlink" title="(6) Markdown 分割线"></a>(6) Markdown 分割线</h2><p>可以在一行中用 <strong>三个 -</strong> 或者 ***** 来建立一个分割线，同时需要在分割线的上面空一行</p>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="string">这是一个分割线</span></span><br><span class="line"></span><br><span class="line"><span class="string">或者</span></span><br><span class="line"></span><br><span class="line"><span class="string">***</span></span><br><span class="line"><span class="string">*****</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="例如-4"><a href="#例如-4" class="headerlink" title="例如"></a>例如</h3><hr>
-<hr>
-<hr>
-<hr>
-<hr>
-<hr>
-<hr>
-<hr>
-<h2 id="7-Markdown-删除线"><a href="#7-Markdown-删除线" class="headerlink" title="(7) Markdown 删除线"></a>(7) Markdown 删除线</h2><p>删除线的使用，需要在删除的文字 <strong>前后</strong> 各使用 <strong>两个</strong> <strong>~</strong> </p>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="string">~~这是要删除的内容~~</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="例如-5"><a href="#例如-5" class="headerlink" title="例如"></a>例如</h3><p><del>这段内容要被删除了</del></p>
-<h2 id="8-Markdown-下划线"><a href="#8-Markdown-下划线" class="headerlink" title="(8) Markdown 下划线"></a>(8) Markdown 下划线</h2><p>下划线的使用，在需要添加下划线的文字首部和尾部加上 <code>&lt;u&gt;文本&lt;/u&gt; </code>，如下</p>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="string">&lt;u&gt;这行文字已被添加下划线&lt;/u&gt;</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="例如-6"><a href="#例如-6" class="headerlink" title="例如"></a>例如</h3><p><u>这行文字已被添加下划线</u></p>
-<h2 id="9-Markdown-表格"><a href="#9-Markdown-表格" class="headerlink" title="(9) Markdown 表格"></a>(9) Markdown 表格</h2><p>表格使用 <code>|</code> 来分隔不同的单元格，使用 <code>-</code> 来分隔表头和其他行，如果想调整表格的左对齐、右对齐、居中对齐：</p>
-<ul>
-<li><code>:-</code>   将表头及单元格的内容 <strong>左对齐</strong></li>
-<li><code>:-:</code> 将表头及单元格的内容 <strong>居中对齐</strong></li>
-<li><code>-:</code>   将表头及单元格的内容 <strong>右对齐</strong></li>
-</ul>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="string">|第一列|第二列|第三列|</span></span><br><span class="line"><span class="string">|:-|:-:|-:|</span></span><br><span class="line"><span class="string">|你好|hello</span> <span class="string">world|学</span> <span class="string">Java</span> <span class="string">，狠狠赚一笔|</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="例如-7"><a href="#例如-7" class="headerlink" title="例如"></a>例如</h3><table>
-<thead>
-<tr>
-<th align="left">第一列</th>
-<th align="center">第二列</th>
-<th align="right">第三列</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">你好</td>
-<td align="center">hello world</td>
-<td align="right">学 Java ，狠狠赚一笔</td>
-</tr>
-</tbody></table>
-<table>
-<thead>
-<tr>
-<th>第一列</th>
-<th>第二列</th>
-<th>第三列</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>你好</td>
-<td>hello world</td>
-<td>学 Java ，狠狠赚一笔</td>
-</tr>
-</tbody></table>
-<h2 id="10-Markdown-图片"><a href="#10-Markdown-图片" class="headerlink" title="(10) Markdown 图片"></a>(10) Markdown 图片</h2><figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="type">![</span><span class="string">图片名称](图片地址)</span></span><br><span class="line"><span class="type">![Vue</span><span class="string">原型链](C:\Users\13627\Desktop\Vue原型链.png)</span></span><br><span class="line"></span><br><span class="line"><span class="type">![</span><span class="string">百度图标](https://www.baidu.com/favicon.ico)</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="例如-8"><a href="#例如-8" class="headerlink" title="例如"></a>例如</h3><p><img src="/posts/Markdown%E8%AF%AD%E6%B3%95/Vue%E5%8E%9F%E5%9E%8B%E9%93%BE.png" alt="Vue原型链"></p>
-<p><img src="https://www.baidu.com/favicon.ico" alt="百度图标"></p>
-<h2 id="11-Markdown-脚注"><a href="#11-Markdown-脚注" class="headerlink" title="(11) Markdown 脚注"></a>(11) Markdown 脚注</h2><p>脚注是对文本的备注说明，脚注与链接的区别，如下：</p>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="string">链接：[文字](链接)</span></span><br><span class="line"></span><br><span class="line"><span class="string">脚注：文字[^脚注名字]</span></span><br><span class="line">[<span class="string">^脚注名字</span>]<span class="string">:</span> <span class="string">这是一个脚注</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="例如-9"><a href="#例如-9" class="headerlink" title="例如"></a>例如</h3><p>链接：<a href="https://www.baidu.com/">百度</a></p>
-<p>脚注：百度<a href="666">^起源</a>     创业<a href="%E5%88%9B%E4%B8%9A%EF%BC%9A%E5%8D%B3%E8%B5%9A%E9%92%B1">^1</a></p>
-<h2 id="12-Markdown-代码块"><a href="#12-Markdown-代码块" class="headerlink" title="(12) Markdown 代码块"></a>(12) Markdown 代码块</h2><p>如果要引用代码块，用  <code> ``</code> 符号包裹起来即可，或者直接输入 <code>```</code> 后面加语言的名字，也可以不加</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	cout &lt;&lt; <span class="string">&quot;hello world&quot;</span> &lt;&lt; endl;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<h1 id="Markdown-高级语法"><a href="#Markdown-高级语法" class="headerlink" title="Markdown 高级语法"></a>Markdown 高级语法</h1><h2 id="1-Markdown-数学公式"><a href="#1-Markdown-数学公式" class="headerlink" title="(1) Markdown 数学公式"></a>(1) Markdown 数学公式</h2><figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="string">$$</span></span><br><span class="line">	<span class="string">这里写公式语法</span></span><br><span class="line"><span class="string">$$</span></span><br></pre></td></tr></table></figure>
-
-
-<p>$$<br>H(D_2) &#x3D; -\left(\frac{2}{4}\log_2 \frac{2}{4} + \frac{2}{4}\log_2 \frac{2}{4}\right) &#x3D; 1<br>$$</p>
-<p>$$<br>\ce{Hg^2+ -&gt;[I-] HgI2 -&gt;[I-] [Hg^{II}I4]^2-}<br>$$</p>
-<p>$$<br>\begin{pmatrix}<br>  1 &amp; a_1 &amp; a_1^2 &amp; \cdots &amp; a_1^n \<br>  1 &amp; a_2 &amp; a_2^2 &amp; \cdots &amp; a_2^n \<br>  \vdots &amp; \vdots &amp; \vdots &amp; \ddots &amp; \vdots \<br>  1 &amp; a_m &amp; a_m^2 &amp; \cdots &amp; a_m^n \<br>  \end{pmatrix}<br>$$</p>
-<h2 id="2-Markdown-TOC-Table-of-Content"><a href="#2-Markdown-TOC-Table-of-Content" class="headerlink" title="(2) Markdown TOC(Table of Content)"></a>(2) Markdown TOC(Table of Content)</h2><p>列出全部标题，通俗点说，就是一个小目录</p>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line">[<span class="string">TOC</span>] <span class="string">或者</span> [<span class="string">toc</span>]</span><br></pre></td></tr></table></figure>
-
-
-
-<p>[TOC]</p>
-<h2 id="3-Markdown-HTML"><a href="#3-Markdown-HTML" class="headerlink" title="(3) Markdown HTML"></a>(3) Markdown HTML</h2><figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">span</span> <span class="attr">style</span>=<span class="string">&quot;display:block;text-align:right;color:orangered;&quot;</span>&gt;</span>橙色居右<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">span</span> <span class="attr">style</span>=<span class="string">&quot;display:block;text-align:center;color:orangered;&quot;</span>&gt;</span>橙色居中<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p><span style="display:block;text-align:right;color:orangered;">橙色居右</span><br><span style="display:block;text-align:center;color:orangered;">橙色居中</span></p>
-<p><font face="黑体">我是黑体字</font><br><font face="微软雅黑">我是微软雅黑</font><br><font face="STCAIYUN">我是华文彩云</font><br><font color="#0099ff" size="7" face="黑体">color&#x3D;#0099ff size&#x3D;72 face&#x3D;”黑体”</font><br><font color="#00ffff" size="72">color&#x3D;#00ffff</font><br><font color="gray" size="72">color&#x3D;gray</font></p>
-<h2 id="4-Markdown-转义"><a href="#4-Markdown-转义" class="headerlink" title="(4) Markdown 转义"></a>(4) Markdown 转义</h2><p>在 <code>Markdown</code> 编辑器里面使用了很多特殊符号来表示特定的意义，该特殊符号将不再显示，这个时候就需要转义字符——反斜杠，如下：</p>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="string">\*\*转义特殊符号正常显示\*\*</span></span><br><span class="line"></span><br><span class="line"><span class="string">**无转义特殊符号无法正常显示**</span></span><br></pre></td></tr></table></figure>
-
-<p>**转义特殊符号正常显示**</p>
-<p><strong>无转义特殊符号无法正常显示</strong></p>
-<h2 id="5-Markdown-URL"><a href="#5-Markdown-URL" class="headerlink" title="(5) Markdown URL"></a>(5) Markdown URL</h2><h2 id="6-Markdown-流程图和时序图"><a href="#6-Markdown-流程图和时序图" class="headerlink" title="(6) Markdown 流程图和时序图"></a>(6) Markdown 流程图和时序图</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sequenceDiagram</span><br><span class="line">玩家一-&gt;&gt;玩家二: 你好</span><br><span class="line">Note right of 玩家二: 正在思考</span><br><span class="line">玩家二--&gt;&gt;玩家一: 666</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="7-Markdown-复选框"><a href="#7-Markdown-复选框" class="headerlink" title="(7) Markdown 复选框"></a>(7) Markdown 复选框</h2><p>使用 <code>- [ ]</code> 和 <code>- [x]</code> 语法可以创建复选框，实现 <code>todo-list</code> 等功能，如下：</p>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="string">默认没选：-</span> [ ] </span><br><span class="line"><span class="string">默认勾选：-</span> [<span class="string">x</span>] </span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><p><input disabled type="checkbox"> 
-111</p>
 </li>
-<li><p><input checked disabled type="checkbox"> 
-222</p>
-</li>
-<li><p><input checked disabled type="checkbox"> 
-333</p>
+<li><p>精确匹配</p>
+<p>如果你输入“&#x2F;the”，你也可能找到“three“。</p>
+<ol>
+<li>只匹配单词开头：&#x2F;\&lt;the</li>
+<li>只匹配单词结尾：&#x2F;the\&gt;</li>
+<li>完整匹配单词：&#x2F;\&lt;the\&gt;</li>
+</ol>
 </li>
 </ul>
-]]></content>
-      <categories>
-        <category>Markdown</category>
-      </categories>
-      <tags>
-        <tag>Markdown</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>mybatis动态sql</title>
-    <url>/posts/mybatis%E5%8A%A8%E6%80%81sql/</url>
-    <content><![CDATA[<h1 id="if-标签"><a href="#if-标签" class="headerlink" title="if 标签"></a>if 标签</h1><p>可以判断是否符合条件，再进行赋值查询</p>
-<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">&quot;xxx&quot;</span> <span class="attr">parameterType</span>=<span class="string">&quot;User&quot;</span> <span class="attr">resultMap</span>=<span class="string">&quot;baseMap&quot;</span>&gt;</span></span><br><span class="line">	select * </span><br><span class="line">    from tb_user</span><br><span class="line">    where 1=1</span><br><span class="line">    <span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">&quot;userName != null&quot;</span>&gt;</span></span><br><span class="line">        and user_name=#&#123;userName&#125;</span><br><span class="line">    <span class="tag">&lt;/<span class="name">if</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">&quot;realName != null&quot;</span>&gt;</span></span><br><span class="line">        and real_name=#&#123;realName&#125;</span><br><span class="line">    <span class="tag">&lt;/<span class="name">if</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">&quot;age &gt; 0&quot;</span>&gt;</span></span><br><span class="line">        and age=#&#123;age&#125;</span><br><span class="line">    <span class="tag">&lt;/<span class="name">if</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">&quot;id != null&quot;</span>&gt;</span></span><br><span class="line">        and id=#&#123;id&#125;</span><br><span class="line">    <span class="tag">&lt;/<span class="name">if</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<h1 id="where-标签"><a href="#where-标签" class="headerlink" title="where 标签"></a>where 标签</h1><p>在写**<code>where</code><strong>的时候，为了保证 <strong><code>SQL</code></strong> 的的语法正确，在有</strong><code>and</code><strong>的情况下，可以用</strong><code>1=1</code><strong>表达式，若不想这么写的话，可以用</strong><code>where</code>**标签</p>
-<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">&quot;xxx&quot;</span> <span class="attr">parameterType</span>=<span class="string">&quot;User&quot;</span> <span class="attr">resultMap</span>=<span class="string">&quot;baseMap&quot;</span>&gt;</span></span><br><span class="line">	select * </span><br><span class="line">	from tb_user</span><br><span class="line">    <span class="tag">&lt;<span class="name">where</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">&quot;userName != null&quot;</span>&gt;</span></span><br><span class="line">            and user_name=#&#123;userName&#125;</span><br><span class="line">        <span class="tag">&lt;/<span class="name">if</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">&quot;realName != null&quot;</span>&gt;</span></span><br><span class="line">            and real_name=#&#123;realName&#125;</span><br><span class="line">        <span class="tag">&lt;/<span class="name">if</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">&quot;age &gt; 0&quot;</span>&gt;</span></span><br><span class="line">            and age=#&#123;age&#125;</span><br><span class="line">        <span class="tag">&lt;/<span class="name">if</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">&quot;id != null&quot;</span>&gt;</span></span><br><span class="line">            and id=#&#123;id&#125;</span><br><span class="line">        <span class="tag">&lt;/<span class="name">if</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">where</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<h1 id="choose-标签"><a href="#choose-标签" class="headerlink" title="choose 标签"></a>choose 标签</h1><p>**<code>choose</code><strong>相当于Java中的</strong><code>switch</code><strong>语句，若第一个不成立，则执行第二个，若第二个也不成立，则执行最后的</strong><code>otherwise</code>**标签里面的内容</p>
-<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">&quot;xxx&quot;</span> <span class="attr">parameterType</span>=<span class="string">&quot;User&quot;</span> <span class="attr">resultMap</span>=<span class="string">&quot;baseMap&quot;</span>&gt;</span></span><br><span class="line">	select * </span><br><span class="line">	from tb_user</span><br><span class="line">    <span class="tag">&lt;<span class="name">where</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">choose</span>&gt;</span></span><br><span class="line">        	<span class="tag">&lt;<span class="name">when</span> <span class="attr">test</span>=<span class="string">&quot;userName != null&quot;</span>&gt;</span></span><br><span class="line">            	and user_name = #&#123;userName&#125;</span><br><span class="line">            <span class="tag">&lt;/<span class="name">when</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">when</span> <span class="attr">test</span>=<span class="string">&quot;realName != null&quot;</span>&gt;</span></span><br><span class="line">            	and real_name = #&#123;realName&#125;</span><br><span class="line">            <span class="tag">&lt;/<span class="name">when</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">otherwise</span>&gt;</span></span><br><span class="line">            	order by id desc</span><br><span class="line">            <span class="tag">&lt;/<span class="name">otherwise</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">choose</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">where</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<h1 id="set-标签"><a href="#set-标签" class="headerlink" title="set 标签"></a>set 标签</h1><p>可以去掉多余的 <strong><code>,</code></strong>  ，避免了**<code>SQL</code>**报错</p>
-<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">update</span> <span class="attr">id</span>=<span class="string">&quot;xxx&quot;</span> <span class="attr">parameterType</span>=<span class="string">&quot;User&quot;</span>&gt;</span></span><br><span class="line">	update </span><br><span class="line">    	tb_user</span><br><span class="line">	<span class="tag">&lt;<span class="name">set</span>&gt;</span></span><br><span class="line">    	<span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">&quot;userName != null&quot;</span>&gt;</span></span><br><span class="line">        	user_name = #&#123;userName&#125;,</span><br><span class="line">        <span class="tag">&lt;/<span class="name">if</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">&quot;realName != null&quot;</span>&gt;</span></span><br><span class="line">            real_name = #&#123;realName&#125;,</span><br><span class="line">        <span class="tag">&lt;/<span class="name">if</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">&quot;age &gt; 0&quot;</span>&gt;</span></span><br><span class="line">            age = #&#123;age&#125;,</span><br><span class="line">        <span class="tag">&lt;/<span class="name">if</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">set</span>&gt;</span></span><br><span class="line">    where</span><br><span class="line">    	id = #&#123;id&#125;</span><br><span class="line"><span class="tag">&lt;/<span class="name">update</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<h1 id="trim-标签"><a href="#trim-标签" class="headerlink" title="trim 标签"></a>trim 标签</h1><p><strong><code>trim</code><strong>标签可以完成 <strong><code>where</code></strong> 或者 <strong><code>set</code></strong> 标签的功能，</strong><code>prefix</code><strong>表示前缀为</strong>where</strong>标签，**<code>prefixOverrides</code><strong>表示去掉前面多余的</strong>and**</p>
-<ul>
-<li>第一种</li>
-</ul>
-<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">&quot;xxx&quot;</span> <span class="attr">parameterType</span>=<span class="string">&quot;User&quot;</span> <span class="attr">resultMap</span>=<span class="string">&quot;baseMap&quot;</span>&gt;</span></span><br><span class="line">	select *</span><br><span class="line">	from tb_user</span><br><span class="line">	<span class="tag">&lt;<span class="name">trim</span> <span class="attr">prefix</span>=<span class="string">&quot;where&quot;</span> <span class="attr">prefixOverrides</span>=<span class="string">&quot;AND | OR&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">&quot;userName != null&quot;</span>&gt;</span></span><br><span class="line">        	and user_name = #&#123;userName&#125;</span><br><span class="line">        <span class="tag">&lt;/<span class="name">if</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">&quot;realName != null&quot;</span>&gt;</span></span><br><span class="line">            and real_name = #&#123;realName&#125;</span><br><span class="line">        <span class="tag">&lt;/<span class="name">if</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">&quot;age &gt; 0&quot;</span>&gt;</span></span><br><span class="line">            and age = #&#123;age&#125;</span><br><span class="line">        <span class="tag">&lt;/<span class="name">if</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">trim</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>**<code>suffixOverrides</code>**表示去掉后面多余的 <strong><code>,</code></strong></p>
-<ul>
-<li>第二种</li>
-</ul>
-<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">update</span> <span class="attr">id</span>=<span class="string">&quot;xxx&quot;</span> <span class="attr">parameterType</span>=<span class="string">&quot;User&quot;</span>&gt;</span></span><br><span class="line">	update</span><br><span class="line">    	tb_user</span><br><span class="line">	<span class="tag">&lt;<span class="name">trim</span> <span class="attr">prefix</span>=<span class="string">&quot;set&quot;</span> <span class="attr">suffixOverrides</span>=<span class="string">&quot;,&quot;</span>&gt;</span></span><br><span class="line">    	<span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">&quot;userName != null&quot;</span>&gt;</span></span><br><span class="line">        	user_name = #&#123;userName&#125;,</span><br><span class="line">        <span class="tag">&lt;/<span class="name">if</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">&quot;realName != null&quot;</span>&gt;</span></span><br><span class="line">            real_name = #&#123;realName&#125;,</span><br><span class="line">        <span class="tag">&lt;/<span class="name">if</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">&quot;age &gt; 0&quot;</span>&gt;</span></span><br><span class="line">            age = #&#123;age&#125;,</span><br><span class="line">        <span class="tag">&lt;/<span class="name">if</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">trim</span>&gt;</span></span><br><span class="line">    where</span><br><span class="line">    	id = #&#123;id&#125;</span><br><span class="line"><span class="tag">&lt;/<span class="name">update</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<h1 id="forEach-标签"><a href="#forEach-标签" class="headerlink" title="forEach 标签"></a>forEach 标签</h1><p><strong><code>forEach</code></strong> 标签可以对集合进行遍历，**<code>open</code><strong>表示开始的括号，</strong><code>close</code><strong>表示最后的括号，</strong><code>separator</code><strong>表示用 <strong><code>,</code></strong> 分割，</strong><code>item</code>**表示每一个元素</p>
-<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">&quot;xxx&quot;</span> <span class="attr">parameterType</span>=<span class="string">&quot;list&quot;</span> <span class="attr">resultMap</span>=<span class="string">&quot;baseMap&quot;</span>&gt;</span></span><br><span class="line">	select *</span><br><span class="line">	from tb_user</span><br><span class="line">	<span class="tag">&lt;<span class="name">where</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">&quot;ids != null&quot;</span>&gt;</span></span><br><span class="line">        	id in</span><br><span class="line">            <span class="tag">&lt;<span class="name">foreach</span> <span class="attr">collection</span>=<span class="string">&quot;ids&quot;</span> <span class="attr">open</span>=<span class="string">&quot;(&quot;</span> <span class="attr">close</span>=<span class="string">&quot;)&quot;</span> <span class="attr">separator</span>=<span class="string">&quot;,&quot;</span> <span class="attr">item</span>=<span class="string">&quot;id&quot;</span>&gt;</span></span><br><span class="line">                #&#123;id&#125;</span><br><span class="line">            <span class="tag">&lt;/<span class="name">foreach</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">if</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">where</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<h1 id="bind-标签"><a href="#bind-标签" class="headerlink" title="bind 标签"></a>bind 标签</h1><p>**<code>bind</code><strong>标签允许在</strong><code>OGNL</code>**表达式以外创建一个变量，将该变量绑定到上下文中，可以供后续使用</p>
-<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">&quot;xxx&quot;</span> <span class="attr">parameterType</span>=<span class="string">&quot;User&quot;</span> <span class="attr">resultMap</span>=<span class="string">&quot;baseMap&quot;</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- &lt;bind name=&quot;userNameLike&quot; value=&quot;&#x27;%&#x27;+_parameter.getUserName()+&#x27;%&#x27;&quot;/&gt; --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">bind</span> <span class="attr">name</span>=<span class="string">&quot;userNameLike&quot;</span> <span class="attr">value</span>=<span class="string">&quot;&#x27;%&#x27; + userName + &#x27;%&#x27;&quot;</span>/&gt;</span></span><br><span class="line">	select *</span><br><span class="line">	from tb_user</span><br><span class="line">	<span class="tag">&lt;<span class="name">where</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">&quot;userName != null&quot;</span>&gt;</span></span><br><span class="line">        	user_name like #&#123;userNameLike&#125;</span><br><span class="line">        <span class="tag">&lt;/<span class="name">if</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">where</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-
-
-]]></content>
+<h3 id="（2）、正则表达式"><a href="#（2）、正则表达式" class="headerlink" title="（2）、正则表达式"></a>（2）、正则表达式</h3><ol>
+<li>”.“：通配一个字符，如匹配server，可以用&#x2F;se…r，一个”.“只匹配一个字符</li>
+<li>”*“：统配多个字符，如匹配server，可以用s*r，一个”*“可以匹配多个字符</li>
+</ol>
+<h3 id="（3）、快速查找"><a href="#（3）、快速查找" class="headerlink" title="（3）、快速查找"></a>（3）、快速查找</h3>]]></content>
       <categories>
         <category>学习笔记</category>
       </categories>
       <tags>
-        <tag>mybatis</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
-    <title>吐槽</title>
-    <url>/posts/%E5%90%90%E6%A7%BD/</url>
-    <content><![CDATA[<p>还在部署博客平台，艹了，简直日了狗</p>
-]]></content>
+    <title>jvm</title>
+    <url>/posts/jvm/</url>
+    <content><![CDATA[]]></content>
       <categories>
-        <category>心之所向</category>
+        <category>学习笔记</category>
       </categories>
       <tags>
-        <tag>随笔</tag>
+        <tag>jvm</tag>
       </tags>
   </entry>
 </search>
