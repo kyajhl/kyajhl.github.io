@@ -445,7 +445,7 @@
 <li><code>georadiusbymember key member radius M|KM|FT|MI [WITHCOORD] [WITHDIST] [WITHHASH] [COUNT count [ANY]] [ASC|DESC] [STORE key|STOREDIST key]</code>：根据位置名称查找，和 <em><strong>georadius</strong></em> 的用法差不多</li>
 </ol>
 <h1 id="Stream类型"><a href="#Stream类型" class="headerlink" title="Stream类型"></a>Stream类型</h1><h2 id="队列相关指令"><a href="#队列相关指令" class="headerlink" title="队列相关指令"></a>队列相关指令</h2><h3 id="1、xadd命令"><a href="#1、xadd命令" class="headerlink" title="1、xadd命令"></a>1、xadd命令</h3><ol>
-<li><code>xadd key [NOMKSTREAM] [MAXLEN|MINID [=|~] threshold [LIMIT count]] *|id field value [field value ...]</code>：添加消息到队列末尾，* 表示自动生成 <em><strong>MessageID</strong></em>，若不加 <em>，则要自己手动加 <em><strong>ID</strong></em>，后面顺序跟着一堆业务 <em><strong>field</strong></em>，</em><strong>value</strong>*</li>
+<li><code>xadd key [NOMKSTREAM] [MAXLEN|MINID [=|~] threshold [LIMIT count]] *|id field value [field value ...]</code>：添加消息到队列末尾，* 表示自动生成 <em><strong>MessageID</strong></em>，若不加 *，则要自己手动加 <em><strong>ID</strong></em>，格式为<em><strong>“时间戳-递增数字”</strong></em>后面顺序跟着一堆业务 <em><strong>field</strong></em>，<em><strong>value</strong></em>，<em><strong>NOMKSTREAM</strong></em> 表示如果队列不存在，是否自动创建队列，默认自动创建</li>
 </ol>
 <h3 id="2、xtrim命令"><a href="#2、xtrim命令" class="headerlink" title="2、xtrim命令"></a>2、xtrim命令</h3><ol>
 <li><code>xtrim key MAXLEN|MINID [=|~] threshold [LIMIT count]</code>：对 <em><strong>Stream</strong></em> 的长度进行截取，<em><strong>maxlen</strong></em> 允许的最大长度，<em><strong>minid</strong></em> 允许的最小 <em><strong>id</strong></em></li>
